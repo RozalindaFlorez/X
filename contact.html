@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact | X Veritas Collegiate</title>
+  <style>
+    :root {
+      --navy: #0a1526;
+      --oxblood: #8b1c1c;
+      --parchment: #f4ecd8;
+      --charcoal: #1a1a1a;
+    }
+
+    body {
+      background-color: var(--parchment);
+      color: var(--charcoal);
+      font-family: 'Georgia', serif;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: var(--navy);
+    }
+
+    p {
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--navy);
+      box-shadow: 0 0 8px rgba(10, 21, 38, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: var(--navy);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: 'Georgia', serif;
+    }
+
+    input[type="submit"] {
+      background-color: var(--oxblood);
+      color: var(--parchment);
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #a32020;
+    }
+
+    .nav-links {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .nav-links a {
+      margin: 0 10px;
+      color: var(--navy);
+      text-decoration: underline;
+    }
+  </style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <header>
+    <img src="crest.png" alt="X Veritas Collegiate Crest" />
+    <h1>Contact X Veritas Collegiate</h1>
+    <p>We welcome inquiries from prospective students, guardians, and strategic partners. Let us know how we can assist you.</p>
+  </header>
+
+  <form action="/contact" method="POST">
+    <label for="name">Full Name</label>
+    <input type="text" name="name" id="name" required />
+
+    <label for="email">Email Address</label>
+    <input type="email" name="email" id="email" required />
+
+    <label for="subject">Subject</label>
+    <input type="text" name="subject" id="subject" required />
+
+    <label for="message">Message</label>
+    <textarea name="message" id="message" rows="6" required></textarea>
+
+    <input type="submit" value="Send Message" />
+  </form>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="academics.html">Academics</a>
+    <a href="admissions.html">Admissions</a>
+    <a href="student-life.html">Student Life</a>
+    
+  </div>
+
+</body>
+</html>

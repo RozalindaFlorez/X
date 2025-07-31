@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Portal - X Veritas Collegiate</title>
+  <style>
+    /* === Root colors + fonts === */
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --oxblood: #8b1c1c;
+      --gold: #bfa45a;
+      --dark-gray: #222222;
+      --light-gray: #f5f5f5;
+      --font-serif: 'Merriweather', serif;
+      --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --transition: 0.4s ease;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.55;
+      scroll-behavior: smooth;
+    }
+    a {
+      color: var(--oxblood);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    a:hover, a:focus {
+      color: var(--gold);
+      outline: none;
+    }
+    h1, h2, h3 {
+      font-family: var(--font-serif);
+      margin: 0 0 0.5rem 0;
+      user-select: none;
+    }
+    h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      color: var(--oxblood);
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--oxblood);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--oxblood);
+      padding-bottom: 0.2rem;
+    }
+    h3 {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: var(--dark-gray);
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: var(--oxblood);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover, button:focus {
+      background-color: var(--gold);
+      color: var(--oxblood);
+      outline: none;
+    }
+    input, select, textarea {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      padding: 0.4rem 0.6rem;
+      border: 1.5px solid var(--oxblood);
+      border-radius: 6px;
+      width: 100%;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--gold);
+      outline: none;
+    }
+    textarea {
+      resize: vertical;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin-top: 0;
+    }
+    li {
+      margin-bottom: 0.3rem;
+    }
+    .card {
+      background: var(--light-gray);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    nav {
+      background: var(--white);
+      padding: 1rem 2rem;
+      border-bottom: 2px solid var(--oxblood);
+      display: flex;
+      gap: 2rem;
+      user-select: none;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    nav button {
+      background: none;
+      color: var(--oxblood);
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    nav button.active {
+      color: var(--gold);
+      border-bottom: 3px solid var(--gold);
+      padding-bottom: 0.2rem;
+    }
+    nav button:hover:not(.active),
+    nav button:focus:not(.active) {
+      color: var(--gold);
+      outline: none;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+    .portal-section {
+      display: none;
+      outline-offset: 3px;
+    }
+    .portal-section.active {
+      display: block;
+    }
+
+    /* === Home page slideshow === */
+    #slideshow {
+      position: relative;
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+    #slideshow img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      border-radius: 10px;
+    }
+    #slideshow img.active {
+      opacity: 1;
+      position: relative;
+    }
+
+    /* === Quotes Section === */
+    #quotesSection {
+      background: var(--oxblood);
+      color: var(--gold);
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 1.2rem;
+      min-height: 90px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      margin-bottom: 2rem;
+      user-select: none;
+      text-align: center;
+      position: relative;
+    }
+    #quotesSection::before {
+      content: "“";
+      font-family: serif;
+      font-size: 3rem;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      opacity: 0.3;
+    }
+    #quotesSection::after {
+      content: "”";
+      font-family: serif;
+      font-size: 3rem;
+      position: absolute;
+      bottom: -10px;
+      right: 10px;
+      opacity: 0.3;
+    }
+
+    /* === Home cards layout === */
+    #newsAndDeadlines {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .newsCard {
+      flex: 1 1 300px;
+      background: var(--light-gray);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+    .newsCard h3 {
+      border-bottom: 1px solid var(--oxblood);
+      padding-bottom: 0.3rem;
+      margin-bottom: 1rem;
+      color: var(--oxblood);
+    }
+    .newsCard ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0;
+    }
+    .newsCard ul li {
+      background: var(--white);
+      padding: 0.5rem 0.8rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--dark-gray);
+      font-size: 1rem;
+    }
+
+    /* Emoji style inside list */
+    .newsCard ul li span.emoji {
+      font-size: 1.3rem;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Messages styling */
+    #inbox {
+      width: 28%;
+      background: var(--light-gray);
+      border-radius: 8px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      height: 500px;
+    }
+    #inbox h2 {
+      padding: 1rem;
+      margin: 0;
+      color: var(--oxblood);
+      border-bottom: 1px solid var(--oxblood);
+      font-size: 1.3rem;
+    }
+    #chatList {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #chatList li {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+    #chatList li:hover, #chatList li.active {
+      background-color: var(--oxblood);
+      color: var(--white);
+    }
+    #chatWindow {
+      flex-grow: 1;
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      max-height: 500px;
+    }
+    #chatHeader {
+      padding: 1rem;
+      border-bottom: 1px solid var(--light-gray);
+      font-weight: 700;
+      color: var(--oxblood);
+      font-size: 1.2rem;
+    }
+    #messageThread {
+      padding: 1rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      background: #fafafa;
+      font-size: 0.95rem;
+    }
+    .message {
+      margin-bottom: 1rem;
+      max-width: 75%;
+      padding: 0.6rem 1rem;
+      border-radius: 20px;
+      clear: both;
+      word-wrap: break-word;
+    }
+    .message.sent {
+      background-color: var(--oxblood);
+      color: white;
+      float: right;
+      border-bottom-right-radius: 0;
+    }
+    .message.received {
+      background-color: var(--light-gray);
+      color: var(--black);
+      float: left;
+      border-bottom-left-radius: 0;
+    }
+    #messageInput {
+      width: 100%;
+      resize: none;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--oxblood);
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      height: 60px;
+      margin-top: 0.5rem;
+    }
+
+    /* Settings profile picture */
+    #profilePictureContainer {
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    #profilePicture {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--oxblood);
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+    #profilePicture:hover {
+      box-shadow: 0 0 10px var(--oxblood);
+    }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      #messages, #inbox {
+        flex-direction: column;
+        height: auto;
+      }
+      #inbox {
+        width: 100%;
+        max-height: 200px;
+        height: 200px;
+      }
+      #chatWindow {
+        max-height: 300px;
+      }
+      #newsAndDeadlines {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+<nav role="navigation" aria-label="Student portal navigation">
+  <button class="active" data-target="home" aria-controls="home" aria-selected="true">Home</button>
+  <button data-target="assignments" aria-controls="assignments" aria-selected="false">Assignments</button>
+  <button data-target="inbox" aria-controls="inbox" aria-selected="false">Inbox</button>
+  <button data-target="tests" aria-controls="tests" aria-selected="false">Exams</button>
+  <button data-target="settings" aria-controls="settings" aria-selected="false">Settings</button>
+  <button onclick="logout()" style="margin-left:auto; background:none; color: var(--oxblood); font-weight: 700; border:none; cursor:pointer;">Logout</button>
+</nav>
+
+<main>
+  <!-- Home Section -->
+  <section id="home" class="portal-section active" tabindex="0" aria-label="Home dashboard">
+    <h1>Welcome to X Veritas Collegiate</h1>
+
+    <div id="slideshow" aria-label="School image slideshow" role="region" aria-live="polite">
+      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80" alt="Campus building" class="active" />
+      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80" alt="Students studying outdoors" />
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80" alt="Library interior" />
+    </div>
+
+    <div id="quotesSection" aria-live="polite" aria-atomic="true" aria-relevant="text">
+      Loading inspirational quotes...
+    </div>
+
+    <div id="newsAndDeadlines">
+      <article class="newsCard" aria-label="School news">
+        <h3>📢 Latest News</h3>
+        <ul>
+          <li><span class="emoji">📅</span> Orientation starts Monday, Aug 5th</li>
+          <li><span class="emoji">📚</span> Textbook pickup open 9AM–3PM</li>
+          <li><span class="emoji">🏫</span> Campus tours daily at 1PM</li>
+        </ul>
+      </article>
+
+      <article class="newsCard" aria-label="Upcoming deadlines">
+        <h3>⏰ Upcoming Deadlines</h3>
+        <ul>
+          <li><span class="emoji">✏️</span> Math Homework #1 - Due Aug 6</li>
+          <li><span class="emoji">📝</span> Intro Essay - Due Aug 10</li>
+          <li><span class="emoji">📸</span> Student ID Photo Upload - Due Aug 8</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- Assignments Section -->
+  <section id="assignments" class="portal-section" tabindex="0" aria-label="Assignments upload and list">
+    <div class="card">
+      <h2>Your Assignments</h2>
+      <label for="departmentSelect"><strong>Select Department / Teacher:</strong></label>
+      <select id="departmentSelect" aria-label="Select department or teacher">
+        <option value="orientation">Orientation Materials</option>
+        <option value="math">Mathematics</option>
+        <option value="english">English</option>
+        <option value="science">Science</option>
+        <option value="history">History</option>
+      </select>
+      <input type="file" id="uploadAssignment" aria-label="Upload assignment file" />
+      <button onclick="uploadDocument()">Upload</button>
+      <div id="assignmentList" style="margin-top: 1rem;"></div>
+    </div>
+  </section>
+
+  <!-- Inbox Section -->
+  <section id="inbox" class="portal-section" tabindex="0" aria-label="Inbox and messages" style="display:flex; gap:1rem; height:500px;">
+    <!-- Inbox sidebar -->
+    <aside id="inboxSidebar" aria-label="Inbox sidebar" style="width: 28%; background: var(--light-gray); border-radius: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); overflow-y: auto;">
+      <h2>Inbox</h2>
+      <ul id="chatList" role="listbox" aria-label="List of chats" tabindex="0" style="list-style:none; margin:0; padding:0;">
+        <!-- Chats inserted by JS -->
+      </ul>
+    </aside>
+
+    <!-- Chat conversation -->
+    <section id="chatWindow" aria-live="polite" aria-atomic="true" aria-relevant="additions" style="flex-grow: 1; background: var(--white); border-radius: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); display:flex; flex-direction: column; max-height: 500px;">
+      <header id="chatHeader" style="padding: 1rem; border-bottom: 1px solid var(--light-gray); font-weight: 700; color: var(--oxblood); font-size: 1.2rem;">
+        Select a chat
+      </header>
+      <div id="messageThread" style="padding: 1rem; overflow-y: auto; flex-grow: 1; background: #fafafa; font-size: 0.95rem;"></div>
+      <div style="padding: 1rem; border-top: 1px solid var(--light-gray);">
+        <textarea id="messageInput" rows="3" placeholder="Type a message..." aria-label="Type your message here"></textarea>
+        <button onclick="sendMessage()" style="margin-top: 0.5rem;">Send</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- Exams Section -->
+  <section id="tests" class="portal-section" tabindex="0" aria-label="Exams and quizzes">
+    <div class="card">
+      <h2>Exams & Quizzes</h2>
+      <p>Feature coming soon!</p>
+    </div>
+  </section>
+
+  <!-- Settings Section -->
+  <section id="settings" class="portal-section" tabindex="0" aria-label="User account settings">
+    <div class="card" style="max-width: 400px; margin: 0 auto;">
+      <h2>Your Profile</h2>
+      <div id="profilePictureContainer">
+        <img id="profilePicture" src="https://via.placeholder.com/120x120.png?text=Profile" alt="Profile picture, click to change" tabindex="0" />
+        <input type="file" id="avatarInput" accept="image/*" style="display:none;" aria-label="Upload new profile picture" />
+      </div>
+
+      <form id="settingsForm">
+        <label for="recoveryEmail">Recovery Email</label>
+        <input type="email" id="recoveryEmail" name="recoveryEmail" placeholder="you@example.com" />
+
+        <label for="recoveryPhone">Recovery Phone</label>
+        <input type="tel" id="recoveryPhone" name="recoveryPhone" placeholder="+1 555 555 5555" />
+
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password" />
+
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" />
+
+        <label for="securityQuestion">Security Question</label>
+        <select id="securityQuestion" name="securityQuestion">
+          <option value="">-- Select a question --</option>
+          <option value="motherMaiden">What is your mother's maiden name?</option>
+          <option value="firstPet">What was the name of your first pet?</option>
+          <option value="firstSchool">What was the name of your first school?</option>
+        </select>
+        <input type="text" id="securityAnswer" name="securityAnswer" placeholder="Your answer" />
+
+        <button type="submit">Save Settings</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Navigation tab switching
+  const navButtons = document.querySelectorAll('nav button[data-target]');
+  const sections = document.querySelectorAll('.portal-section');
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navButtons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      const target = btn.getAttribute('data-target');
+      sections.forEach(sec => {
+        if (sec.id === target) {
+          sec.classList.add('active');
+          sec.style.display = target === 'inbox' ? 'flex' : 'block';
+          sec.focus();
+        } else {
+          sec.classList.remove('active');
+          sec.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Slideshow logic for home
+  const slides = document.querySelectorAll('#slideshow img');
+  let currentSlide = 0;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+
+  setInterval(nextSlide, 5000); // change every 5 seconds
+
+  // Quotes rotating
+  const quotes = [
+    "Trust in the LORD with all your heart and lean not on your own understanding. - Proverbs 3:5",
+    "For I know the plans I have for you, declares the LORD. - Jeremiah 29:11",
+    "Be strong and courageous. Do not be afraid; do not be discouraged. - Joshua 1:9",
+    "Let all that you do be done in love. - 1 Corinthians 16:14",
+    "The joy of the LORD is your strength. - Nehemiah 8:10",
+    "Commit to the LORD whatever you do, and your plans will succeed. - Proverbs 16:3",
+    "I can do all things through Christ who strengthens me. - Philippians 4:13"
+  ];
+  const quotesEl = document.getElementById('quotesSection');
+  let quoteIndex = 0;
+
+  function showQuote(index) {
+    quotesEl.textContent = quotes[index];
+  }
+
+  function nextQuote() {
+    quoteIndex = (quoteIndex + 1) % quotes.length;
+    showQuote(quoteIndex);
+  }
+
+  showQuote(quoteIndex);
+  setInterval(nextQuote, 8000);
+
+  // Assignments upload functionality
+  const assignmentListEl = document.getElementById('assignmentList');
+  const assignments = {};
+
+  function uploadDocument() {
+    const dept = document.getElementById('departmentSelect').value;
+    const fileInput = document.getElementById('uploadAssignment');
+    if (!fileInput.files.length) {
+      alert('Please select a file to upload.');
+      return;
+    }
+    const file = fileInput.files[0];
+
+    if (!assignments[dept]) assignments[dept] = [];
+    assignments[dept].push(file.name);
+
+    // Clear input
+    fileInput.value = '';
+
+    renderAssignments();
+  }
+
+  function renderAssignments() {
+    assignmentListEl.innerHTML = '';
+    for (const dept in assignments) {
+      const div = document.createElement('div');
+      div.innerHTML = `<h3>${dept.charAt(0).toUpperCase() + dept.slice(1)} Department</h3>`;
+      const ul = document.createElement('ul');
+      assignments[dept].forEach(filename => {
+        const li = document.createElement('li');
+        li.textContent = filename;
+        ul.appendChild(li);
+      });
+      div.appendChild(ul);
+      assignmentListEl.appendChild(div);
+    }
+  }
+
+  // Inbox / messages setup
+  const chatListEl = document.getElementById('chatList');
+  const chatHeaderEl = document.getElementById('chatHeader');
+  const messageThreadEl = document.getElementById('messageThread');
+  const messageInputEl = document.getElementById('messageInput');
+
+  let currentChatId = null;
+
+  // Sample chats
+  const chats = [
+    {
+      id: 'teacher1',
+      name: 'Mrs. Johnson (Math)',
+      messages: [
+        { from: 'teacher', text: 'Hello, please remember to submit your homework by Friday.' },
+        { from: 'student', text: 'Thanks, I will!' },
+      ]
+    },
+    {
+      id: 'advisor',
+      name: 'Student Advisor',
+      messages: [
+        { from: 'advisor', text: 'Don’t forget the orientation on Monday.' },
+      ]
+    },
+    {
+      id: 'principal',
+      name: 'Principal Office',
+      messages: [
+        { from: 'principal', text: 'Welcome back to school! Stay safe and focused.' },
+      ]
+    }
+  ];
+
+  function renderChatList() {
+    chatListEl.innerHTML = '';
+    chats.forEach(chat => {
+      const li = document.createElement('li');
+      li.textContent = chat.name;
+      li.setAttribute('role', 'option');
+      li.setAttribute('tabindex', '0');
+      li.dataset.chatId = chat.id;
+      li.addEventListener('click', () => openChat(chat.id));
+      li.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openChat(chat.id);
+        }
+      });
+      if (chat.id === currentChatId) {
+        li.classList.add('active');
+      }
+      chatListEl.appendChild(li);
+    });
+  }
+
+  function openChat(id) {
+    currentChatId = id;
+    renderChatList();
+    const chat = chats.find(c => c.id === id);
+    chatHeaderEl.textContent = chat.name;
+    renderMessages(chat.messages);
+    messageInputEl.focus();
+  }
+
+  function renderMessages(messages) {
+    messageThreadEl.innerHTML = '';
+    messages.forEach(msg => {
+      const div = document.createElement('div');
+      div.classList.add('message');
+      div.classList.add(msg.from === 'student' ? 'sent' : 'received');
+      div.textContent = msg.text;
+      messageThreadEl.appendChild(div);
+    });
+    messageThreadEl.scrollTop = messageThreadEl.scrollHeight;
+  }
+
+  function sendMessage() {
+    if (!currentChatId) {
+      alert('Please select a chat first.');
+      return;
+    }
+    const text = messageInputEl.value.trim();
+    if (!text) return;
+    const chat = chats.find(c => c.id === currentChatId);
+    chat.messages.push({ from: 'student', text });
+    renderMessages(chat.messages);
+    messageInputEl.value = '';
+    messageInputEl.focus();
+  }
+
+  renderChatList();
+
+  // Settings profile picture upload
+  const profilePicture = document.getElementById('profilePicture');
+  const avatarInput = document.getElementById('avatarInput');
+
+  profilePicture.addEventListener('click', () => avatarInput.click());
+  profilePicture.addEventListener('keypress', e => {
+    if(e.key === 'Enter' || e.key === ' ') avatarInput.click();
+  });
+
+  avatarInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      profilePicture.src = ev.target.result;
+    }
+    reader.readAsDataURL(file);
+  });
+
+  // Settings form submit
+  document.getElementById('settingsForm').addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Settings saved (simulated).');
+  });
+
+  // Logout placeholder
+  function logout() {
+    alert('Logged out (simulated).');
+  }
+</script>
+
+</body>
+</html>

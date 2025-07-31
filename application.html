@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Form | X Veritas Collegiate</title>
+  <style>
+    :root {
+      --navy: #0a1526;
+      --oxblood: #8b1c1c;
+      --parchment: #e8d9b6;
+      --ivory: #f9f6f1;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background-color: var(--ivory);
+      color: #333;
+    }
+
+    header {
+      background-color: var(--navy);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    nav {
+      background-color: var(--parchment);
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: inline-flex;
+      gap: 2rem;
+    }
+
+    nav li {
+      display: inline;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: var(--oxblood);
+    }
+
+    form {
+      background-color: white;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--oxblood);
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5f1212;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--navy);
+      color: white;
+      margin-top: 4rem;
+    }
+  </style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <h1>Application Form</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="academics.html">Academics</a></li>
+      <li><a href="admissions.html">Admissions</a></li>
+      <li><a href="student-life.html">Student Life</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <form action="/submit-application" method="POST" enctype="multipart/form-data">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" required>
+  
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required>
+  
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" name="dob" required>
+  
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" name="phone" placeholder="e.g. (555) 123-4567" required>
+  
+    <label for="address">Home Address</label>
+    <input type="text" id="address" name="address" required>
+  
+    <label for="highschool">High School Name</label>
+    <input type="text" id="highschool" name="highschool" required>
+  
+    <label for="gpa">Current GPA (on 4.0 scale)</label>
+    <input type="number" step="0.01" min="0" max="4.0" id="gpa" name="gpa" required>
+  
+    <label for="intended-major">Intended Area of Study</label>
+<select id="intended-major" name="intended-major" required>
+  <option value="">-- Please choose an option --</option>
+  <option value="strategic-intelligence">Strategic Intelligence & Decision Sciences</option>
+  <option value="leadership-ethics">Leadership, Governance & Ethics</option>
+  <option value="resilience-studies">Human Resilience & Adaptive Psychology</option>
+  <option value="aesthetic-design">Aesthetic Design & Classical Expression</option>
+  <option value="systems-engineering">Systems Engineering & Tactical Innovation</option>
+  <option value="civil-diplomacy">Civic Diplomacy & Global Negotiation</option>
+  <option value="wildcraft-science">Field Sciences & Wildcraft Operations</option>
+  <option value="philosophy">Philosophy, Logic & Intellectual Tradition</option>
+  <option value="custom">Other (Please specify in personal statement)</option>
+</select>
+
+  
+    <label for="statement">Personal Statement</label>
+    <textarea id="statement" name="statement" rows="6" placeholder="Describe your motivation, resilience, and goals..." required></textarea>
+  
+    <label for="goals">What do you hope to gain from X Veritas?</label>
+    <textarea id="goals" name="goals" rows="4"></textarea>
+  
+    <label for="resume">Upload Resume (PDF, DOCX)</label>
+    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+  
+    <label for="activities">Extracurricular Activities or Special Skills</label>
+    <textarea id="activities" name="activities" rows="3" placeholder="Clubs, sports, certifications, awards..."></textarea>
+  
+    <label for="referral">How did you hear about X Veritas Collegiate?</label>
+    <input type="text" id="referral" name="referral" placeholder="Referral, social media, event, etc.">
+  
+    <label for="questions">Any questions for our admissions team?</label>
+    <textarea id="questions" name="questions" rows="3"></textarea>
+  
+    <button type="submit">Submit Application</button>
+  </form>
+
+  <footer>
+    &copy; 2025 X Veritas Collegiate. All rights reserved.
+  </footer>
+</body>
+</html>

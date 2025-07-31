@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>X Veritas Collegiate</title>
+  <style>
+    :root {
+      --navy: #0a1526;
+      --oxblood: #8b1c1c;
+      --parchment: #e8d9b6;
+      --charcoal: #1c1c1c;
+      --gold: #d6b66b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Garamond', serif;
+      background-color: var(--parchment);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.6;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      width: 100%;
+      padding: 10px 40px;
+      display: flex;
+      justify-content: flex-end;
+      background-color: var(--navy);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 10;
+    }
+
+    .top-bar a.login {
+      font-size: 13px;
+      color: var(--parchment);
+      text-decoration: none;
+      border: 1px solid var(--parchment);
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .top-bar a.login:hover {
+      background-color: var(--oxblood);
+      color: #fff;
+      border-color: var(--oxblood);
+    }
+
+    /* Header */
+    header {
+      background-color: var(--navy);
+      color: var(--parchment);
+      padding: 30px 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 4px solid var(--gold);
+      width: 100%;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .branding {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .branding img {
+      height: 140px;
+      width: auto;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 3px var(--gold));
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    }
+
+    .university-name {
+      font-size: 44px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-family: 'Garamond', serif;
+      color: var(--gold);
+      line-height: 1.1;
+    }
+
+    .motto {
+      font-size: 16px;
+      font-style: italic;
+      color: #dbcda5;
+      margin-top: 6px;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      background-color: #f3efe1;
+      padding: 18px 0;
+      border-bottom: 1px solid #ccc;
+      font-family: 'Georgia', serif;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 16px;
+      border-bottom: 3px solid transparent;
+      padding-bottom: 4px;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--oxblood);
+      border-bottom: 3px solid var(--oxblood);
+    }
+
+    /* Main content wrapper */
+    main {
+      max-width: 700px;
+      width: 100%;
+      padding: 40px 30px 80px;
+      font-family: 'Georgia', serif;
+      background-color: #faf7ef;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(214,182,107,0.2);
+      color: var(--charcoal);
+      margin-top: 60px;
+      margin-bottom: 60px;
+    }
+
+    main h2 {
+      font-family: 'Garamond', serif;
+      font-size: 36px;
+      margin-bottom: 30px;
+      text-align: center;
+      color: var(--navy);
+      letter-spacing: 0.1em;
+      font-weight: 900;
+    }
+
+    main p {
+      font-size: 19px;
+      font-weight: 500;
+      margin-bottom: 18px;
+      letter-spacing: 0.03em;
+    }
+
+    blockquote {
+      font-style: italic;
+      font-size: 20px;
+      margin-top: 60px;
+      color: var(--oxblood);
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 4px rgba(139,28,28,0.22);
+    }
+
+    /* Button */
+    #reveal-quiz {
+      font-size: 20px;
+      padding: 14px 40px;
+      background-color: var(--oxblood);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Georgia', serif;
+      display: block;
+      margin: 40px auto 0;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      box-shadow: 0 5px 10px rgba(139, 28, 28, 0.4);
+      transition: background-color 0.3s ease;
+    }
+
+    #reveal-quiz:hover {
+      background-color: #a32020;
+    }
+
+    /* Quiz Section */
+    #cadet-quiz {
+      max-width: 700px;
+      margin: 40px auto 80px;
+      padding: 40px 30px;
+      background: #f8f3e7;
+      border-top: 3px solid var(--gold);
+      border-bottom: 3px solid var(--gold);
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      line-height: 1.8;
+      display: none;
+      border-radius: 14px;
+      box-shadow: 0 0 20px rgba(214,182,107,0.3);
+    }
+
+    #cadet-quiz p {
+      font-weight: 700;
+      margin-top: 24px;
+    }
+
+    #cadet-quiz label {
+      font-weight: 400;
+      margin-left: 12px;
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    #cadet-quiz input[type="radio"] {
+      cursor: pointer;
+      transform: scale(1.1);
+      margin-right: 8px;
+    }
+
+    #cadet-quiz input[type="text"],
+    #cadet-quiz input[type="email"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: 'Georgia', serif;
+    }
+
+    #cadet-quiz button {
+      padding: 14px 36px;
+      font-size: 18px;
+      background-color: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Georgia', serif;
+      margin-top: 40px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      box-shadow: 0 5px 10px rgba(10,21,38,0.8);
+      transition: background-color 0.3s ease;
+    }
+
+    #cadet-quiz button:hover {
+      background-color: #071022;
+    }
+
+    /* Result Section */
+    #quiz-result {
+      max-width: 700px;
+      margin: 40px auto 40px;
+      padding: 30px 20px;
+      background-color: #e9e4d4;
+      border-radius: 12px;
+      font-family: 'Georgia', serif;
+      font-size: 22px;
+      color: var(--oxblood);
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(139,28,28,0.3);
+      display: none;
+    }
+
+    /* Next steps */
+    #next-steps {
+      max-width: 700px;
+      margin: 0 auto 80px;
+      font-family: 'Georgia', serif;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #333;
+      display: none;
+      text-align: center;
+    }
+
+    #next-steps a {
+      color: var(--oxblood);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    #next-steps a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 850px) {
+      main, #cadet-quiz {
+        margin: 40px 20px 40px;
+        padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .branding img {
+        height: 100px;
+      }
+      .university-name {
+        font-size: 30px;
+      }
+      nav {
+        gap: 20px;
+        padding: 14px 0;
+      }
+      #reveal-quiz {
+        font-size: 18px;
+        padding: 12px 30px;
+      }
+    }
+  </style>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Replace with your actual Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.storeCadetProfile = async function(name, email, score, tier) {
+      try {
+        await addDoc(collection(db, "cadets"), {
+          name,
+          email,
+          score,
+          tier,
+          submittedAt: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error("Error storing cadet profile:", err);
+      }
+    };
+  </script>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+  <div class="top-bar">
+    <a href="login.html" class="login">Login</a>
+  </div>
+
+  <header>
+    <div class="branding">
+      <img src="crest.png" alt="X Veritas Collegiate Crest" />
+      <div class="title-block">
+        <div class="university-name">X Veritas Collegiate</div>
+        <div class="motto">"In Truth, Power. In Power, Purpose."</div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <a href="about.html">About</a>
+    <a href="academics.html">Academics</a>
+    <a href="admissions.html">Admissions</a>
+    <a href="student-life.html">Student Life</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main>
+    <h2>Welcome to X Veritas Collegiate</h2>
+    <p><strong>X Veritas is not a school.</strong> It is a crucible where you are broken down and rebuilt to be stronger, sharper, and unshakable.</p>
+    <p>Discipline and self-mastery are the foundation of leadership.</p>
+    <p>We prepare leaders who act with intent, speak with purpose, and shape the future.</p>
+    <p>If you are ready to take the first step on this demanding path, begin with the Cadet Aptitude Assessment below.</p>
+
+    <blockquote>“To rule the self is to conquer the world.”</blockquote>
+
+    <button id="reveal-quiz">Begin Cadet Evaluation</button>
+
+    <section id="cadet-quiz" aria-label="Cadet Aptitude Assessment">
+      <h2>Cadet Aptitude Assessment</h2>
+      <form id="quiz-form" novalidate>
+        <label for="nameInput">Cadet Full Name:</label>
+        <input type="text" id="nameInput" name="nameInput" required autocomplete="name" />
+
+        <label for="emailInput">Email Address:</label>
+        <input type="email" id="emailInput" name="emailInput" required autocomplete="email" />
+
+        <p>1. A superior gives you an ambiguous command. What do you do?</p>
+        <label><input type="radio" name="q1" value="2" required /> Interpret, act, and report.</label>
+        <label><input type="radio" name="q1" value="1" /> Ask for clarification.</label>
+        <label><input type="radio" name="q1" value="0" /> Wait passively.</label>
+
+        <p>2. In conflict, you most value:</p>
+        <label><input type="radio" name="q2" value="2" required /> Control over emotion.</label>
+        <label><input type="radio" name="q2" value="1" /> Tactical advantage.</label>
+        <label><input type="radio" name="q2" value="0" /> Avoidance.</label>
+
+        <p>3. When studying, you prefer to:</p>
+        <label><input type="radio" name="q3" value="2" required /> Master systems independently.</label>
+        <label><input type="radio" name="q3" value="1" /> Follow structured lessons.</label>
+        <label><input type="radio" name="q3" value="0" /> Skim for answers.</label>
+
+        <p>4. Discipline is:</p>
+        <label><input type="radio" name="q4" value="2" required /> Freedom through structure.</label>
+        <label><input type="radio" name="q4" value="1" /> A means to success.</label>
+        <label><input type="radio" name="q4" value="0" /> Unnatural limitation.</label>
+
+        <p>5. You are observed under pressure. What shows first?</p>
+        <label><input type="radio" name="q5" value="2" required /> Precision.</label>
+        <label><input type="radio" name="q5" value="1" /> Leadership.</label>
+        <label><input type="radio" name="q5" value="0" /> Anxiety.</label>
+
+        <p>6. In a room of strangers, you:</p>
+        <label><input type="radio" name="q6" value="2" required /> Scan, assess, and adapt.</label>
+        <label><input type="radio" name="q6" value="1" /> Wait to be approached.</label>
+        <label><input type="radio" name="q6" value="0" /> Withdraw.</label>
+
+        <p>7. Strength is best measured by:</p>
+        <label><input type="radio" name="q7" value="2" required /> Endurance in solitude.</label>
+        <label><input type="radio" name="q7" value="1" /> Influence over others.</label>
+        <label><input type="radio" name="q7" value="0" /> Physical display.</label>
+
+        <p>8. When tasked with leadership, your instinct is to:</p>
+        <label><input type="radio" name="q8" value="2" required /> Set silent standards.</label>
+        <label><input type="radio" name="q8" value="1" /> Rally others vocally.</label>
+        <label><input type="radio" name="q8" value="0" /> Defer to peers.</label>
+
+        <p>9. Your greatest fear is:</p>
+        <label><input type="radio" name="q9" value="2" required /> Becoming dull or unsharpened.</label>
+        <label><input type="radio" name="q9" value="1" /> Losing control.</label>
+        <label><input type="radio" name="q9" value="0" /> Being seen.</label>
+
+        <p>10. Your ideal battlefield is:</p>
+        <label><input type="radio" name="q10" value="2" required /> The internal war.</label>
+        <label><input type="radio" name="q10" value="1" /> Psychological operations.</label>
+        <label><input type="radio" name="q10" value="0" /> Physical combat.</label>
+
+        <button type="button" id="submitQuiz">Submit Evaluation</button>
+      </form>
+    </section>
+
+    <section id="quiz-result"></section>
+    <section id="next-steps">
+      <p>Thank you for completing the assessment. Your dedication is the first step towards greatness.</p>
+      <p>Our admissions team will review your results and contact you with next steps.</p>
+      <p>Meanwhile, explore more about <a href="about.html">X Veritas Collegiate</a>.</p>
+    </section>
+  </main>
+
+  <script>
+    const revealBtn = document.getElementById('reveal-quiz');
+    const quizSection = document.getElementById('cadet-quiz');
+    const quizForm = document.getElementById('quiz-form');
+    const resultSection = document.getElementById('quiz-result');
+    const nextStepsSection = document.getElementById('next-steps');
+
+    // Show quiz on button click
+    revealBtn.addEventListener('click', () => {
+      quizSection.style.display = 'block';
+      revealBtn.style.display = 'none';
+      window.scrollTo({ top: quizSection.offsetTop - 40, behavior: 'smooth' });
+    });
+
+    // Calculate tier from score
+    function getTier(score) {
+      if (score >= 17) return "Tier I Operative";
+      if (score >= 13) return "Tier II Cadet";
+      if (score >= 9) return "Tier III Aspirant";
+      return "Tier IV Applicant";
+    }
+
+    quizForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Validate inputs (simple)
+      const name = quizForm.nameInput.value.trim();
+      const email = quizForm.emailInput.value.trim();
+      if (!name || !email) {
+        alert("Please enter your name and email.");
+        return;
+      }
+
+      let totalScore = 0;
+      for (let i = 1; i <= 10; i++) {
+        const selected = quizForm['q' + i].value;
+        if (!selected) {
+          alert(`Please answer question ${i}.`);
+          return;
+        }
+        totalScore += parseInt(selected, 10);
+      }
+
+      const tier = getTier(totalScore);
+
+      // Store data (simulate with console.log or Firebase here)
+      if (typeof storeCadetProfile === 'function') {
+        storeCadetProfile(name, email, totalScore, tier);
+      }
+
+      // Show result and next steps
+      quizSection.style.display = 'none';
+      resultSection.style.display = 'block';
+      nextStepsSection.style.display = 'block';
+
+      resultSection.textContent = `${name}, your score is ${totalScore}. You qualify as a ${tier}.`;
+      window.scrollTo({ top: resultSection.offsetTop - 40, behavior: 'smooth' });
+    });
+
+    // Button triggers form submission
+    document.getElementById('submitQuiz').addEventListener('click', () => {
+      quizForm.requestSubmit();
+    });
+  </script>
+<script src="login.js"></script>
+
+</body>
+</html>

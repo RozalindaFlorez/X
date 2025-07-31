@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Login - X Veritas Collegiate</title>
+  <style>
+    /* Your existing CSS styles */
+    /* (Keep all your styles here) */
+  </style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <header>
+    <img src="crest.png" alt="X Veritas Collegiate Crest" class="crest" />
+    <div class="logo">X Veritas Collegiate</div>
+    <nav>
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About Us</a>
+      <a href="/academics.html">Academics</a>
+      <a href="/admissions.html">Admissions & Aid</a>
+      <a href="/student-life.html">Student Life</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="login-wrapper">
+      <h3>Student Portal Login</h3>
+
+      <!-- Show error message if login failed -->
+      <div id="error-msg" style="color:red; text-align:center; margin-bottom:1rem;">
+        <script>
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('error') === 'invalid') {
+            document.write('Invalid email or password.');
+          }
+        </script>
+      </div>
+
+      <!-- Note: The form action is /student-login POST -->
+      <form action="/student-login" method="POST" autocomplete="username">
+        <input type="email" name="email" placeholder="Email address" required autofocus />
+        <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+        <div class="forgot-password">
+          <a href="/forgot-password.html?type=student">Forgot password?</a>
+        </div>
+        <input type="submit" value="Log In" />
+      </form>
+    </div>
+  </main>
+</body>
+</html>

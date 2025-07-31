@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Life - X Veritas Collegiate</title>
+  <style>
+    /* Root colors inspired by crest + black & white */
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --oxblood: #8b1c1c; /* deep red accent */
+      --gold: #bfa45a; /* subtle luxury gold */
+      --dark-gray: #222222;
+      --light-gray: #f5f5f5;
+      --font-serif: 'Merriweather', serif;
+      --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --transition: 0.4s ease;
+    }
+
+    /* Reset & base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.55;
+      scroll-behavior: smooth;
+    }
+    a {
+      color: var(--oxblood);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color var(--transition);
+    }
+    a:hover, a:focus {
+      color: var(--gold);
+      outline: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--light-gray);
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      z-index: 1000;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      user-select: none;
+    }
+    .logo-container img {
+      height: 56px;
+      width: auto;
+    }
+    .logo-container h1 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.7rem;
+      letter-spacing: 0.2em;
+      color: var(--oxblood);
+      margin: 0;
+    }
+    .logo-container .motto {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-style: italic;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--dark-gray);
+      margin-top: 2px;
+      user-select: none;
+    }
+    nav a {
+      margin-left: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--black);
+      user-select: none;
+      transition: color var(--transition);
+    }
+    nav a:hover, nav a:focus {
+      color: var(--oxblood);
+      outline: none;
+    }
+
+    /* Main container */
+    main {
+      max-width: 760px;
+      margin: 3rem auto 4rem;
+      padding: 0 1.5rem;
+    }
+
+    /* Section styling */
+    section {
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+      will-change: opacity, transform;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Headings */
+    h2 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+      color: var(--oxblood);
+      user-select: none;
+    }
+    h3 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-gray);
+      user-select: none;
+    }
+
+    /* Tagline under main title */
+    .tagline {
+      font-style: italic;
+      letter-spacing: 0.12em;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--dark-gray);
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+
+    /* Paragraphs */
+    p {
+      font-size: 1.1rem;
+      color: var(--black);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* Testimonials */
+    .testimonial {
+      font-style: italic;
+      background: var(--light-gray);
+      border-left: 4px solid var(--oxblood);
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 1px 1px 6px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+    .testimonial cite {
+      display: block;
+      font-style: normal;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      color: var(--oxblood);
+    }
+
+    /* Quiz container */
+    #quiz-section {
+      padding: 2rem 0 0 0;
+      font-family: var(--font-serif);
+    }
+    #quiz-container {
+      margin-top: 1rem;
+      border-top: 1px solid var(--oxblood);
+      padding-top: 1rem;
+    }
+    #quiz-container.hidden {
+      display: none;
+    }
+    #quiz-results {
+      margin-top: 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--oxblood);
+      outline: none;
+    }
+    #inspirational-msg {
+      margin-top: 1rem;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--dark-gray);
+      user-select: none;
+    }
+    #start-quiz-btn {
+      background-color: var(--oxblood);
+      color: var(--white);
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #start-quiz-btn:hover, #start-quiz-btn:focus {
+      background-color: var(--gold);
+      outline: none;
+    }
+    #submit-quiz-btn {
+      margin-top: 1rem;
+      background-color: var(--oxblood);
+      color: var(--white);
+      border: none;
+      padding: 0.6rem 1.8rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+    #submit-quiz-btn:hover, #submit-quiz-btn:focus {
+      background-color: var(--gold);
+      outline: none;
+    }
+    .quiz-question {
+      margin-bottom: 1rem;
+    }
+    .quiz-question label {
+      margin-left: 0.4rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    input[type="radio"] {
+      cursor: pointer;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      margin: 4rem auto 3rem;
+      user-select: none;
+    }
+    .cta a {
+      background-color: var(--oxblood);
+      color: var(--white);
+      padding: 1rem 3rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(139,28,28,0.7);
+      transition: background-color 0.3s ease;
+      display: inline-block;
+      letter-spacing: 0.1em;
+    }
+    .cta a:hover, .cta a:focus {
+      background-color: var(--gold);
+      color: var(--oxblood);
+      outline: none;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--dark-gray);
+      padding: 2rem 1rem 3rem;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 620px) {
+      main {
+        padding: 0 1rem;
+      }
+      header {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+      }
+      nav a {
+        margin-left: 1rem;
+        font-size: 0.95rem;
+      }
+      .logo-container h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+
+<header>
+  <div class="logo-container" aria-label="College logo and name">
+    <img src="crest.png" alt="X Veritas Collegiate Crest" />
+    <div>
+      <h1>X Veritas Collegiate</h1>
+      <div class="motto" aria-label="School motto">In Truth, Power. In Power, Purpose.</div>
+    </div>
+  </div>
+  <nav aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="admissions.html">Admissions</a>
+    <a href="academics.html">Academics</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<main>
+
+  <section id="student-life-intro" tabindex="0">
+    <h2>Student Life</h2>
+    <div class="tagline">Discipline. Endurance. Excellence.</div>
+    <p>
+      At X Veritas Collegiate, student life is not merely a chapter — it’s the crucible where intellect and character are forged.
+      You will be challenged rigorously, supported by a community committed to collective excellence, and prepared to lead with unshakable resolve.
+    </p>
+  </section>
+
+  <section id="academics" tabindex="0">
+    <h3>Academic Rigor & Full-Time Commitment</h3>
+    <p>
+      Our four-year curriculum demands your fullest focus and dedication.  
+      Courses push you beyond conventional boundaries — blending analytical depth with practical application, sharpening the mind for precision and clarity.
+    </p>
+  </section>
+
+  <section id="leadership" tabindex="0">
+    <h3>Leadership in Action</h3>
+    <p>
+      Leadership at X Veritas emerges from experience and responsibility.  
+      Cohort-based challenges, peer evaluations, and immersive training prepare you to navigate complexity and pressure with calm authority.
+    </p>
+  </section>
+
+  <section id="community" tabindex="0">
+    <h3>Culture & Camaraderie</h3>
+    <p>
+      Though demanding, your journey is shared with peers who become lifelong allies.  
+      Traditions, mutual accountability, and collective discipline create a unique bond within our tight-knit community.
+    </p>
+  </section>
+
+  <section id="testimonials" tabindex="0">
+    <h3>Alumni Reflections</h3>
+    <article class="testimonial" tabindex="0" aria-label="Testimonial from alumna Sarah L.">
+      “X Veritas taught me that true strength lies in perseverance. The lessons here shaped my career and character beyond measure.”  
+      <cite>— Sarah L., Class of 2017, Strategic Advisor</cite>
+    </article>
+    <article class="testimonial" tabindex="0" aria-label="Testimonial from alumnus James M.">
+      “The intensity was real, but so was the support. I graduated prepared to lead in the most demanding environments.”  
+      <cite>— James M., Class of 2014, Defense Analyst</cite>
+    </article>
+    <article class="testimonial" tabindex="0" aria-label="Testimonial from alumna Amina R.">
+      “X Veritas is a forge of intellect and endurance. I carry that fire with me every day.”  
+      <cite>— Amina R., Class of 2020, Tech Innovator</cite>
+    </article>
+  </section>
+
+  <section id="quiz-section">
+    <h3>Discover Your Academic Fit</h3>
+    <button id="start-quiz-btn" aria-expanded="false">Start the Quiz</button>
+
+    <div id="quiz-container" class="hidden" aria-live="polite">
+      <form id="student-life-quiz">
+        <div class="quiz-question">
+          <label>1. You prefer tasks that require:</label><br />
+          <input type="radio" name="q1" value="intelligence" required /> Strategic analysis<br />
+          <input type="radio" name="q1" value="design" /> Creative vision<br />
+          <input type="radio" name="q1" value="wildcraft" /> Physical endurance<br />
+        </div>
+        <div class="quiz-question">
+          <label>2. What motivates you most?</label><br />
+          <input type="radio" name="q2" value="leadership" required /> Guiding others to succeed<br />
+          <input type="radio" name="q2" value="philosophy" /> Understanding deeper truths<br />
+          <input type="radio" name="q2" value="civil" /> Making a social impact<br />
+        </div>
+        <div class="quiz-question">
+          <label>3. Your strongest trait is:</label><br />
+          <input type="radio" name="q3" value="resilience" required /> Emotional toughness<br />
+          <input type="radio" name="q3" value="diplomacy" /> Persuasion and clarity<br />
+          <input type="radio" name="q3" value="systems" /> Systematic thinking<br />
+        </div>
+        <div class="quiz-question">
+          <label>4. In your free time, you enjoy:</label><br />
+          <input type="radio" name="q4" value="philosophy" required /> Reading and deep thinking<br />
+          <input type="radio" name="q4" value="design" /> Sketching, music, or design<br />
+          <input type="radio" name="q4" value="wildcraft" /> Exploring the outdoors<br />
+        </div>
+        <div class="quiz-question">
+          <label>5. In a team project, you tend to:</label><br />
+          <input type="radio" name="q5" value="leadership" required /> Organize and delegate<br />
+          <input type="radio" name="q5" value="intelligence" /> Strategize and analyze<br />
+          <input type="radio" name="q5" value="civil" /> Facilitate harmony<br />
+        </div>
+        <div class="quiz-question">
+          <label>6. Which quote resonates with you most?</label><br />
+          <input type="radio" name="q6" value="resilience" required /> “What stands in the way becomes the way.”<br />
+          <input type="radio" name="q6" value="diplomacy" /> “Speak softly and carry a big stick.”<br />
+          <input type="radio" name="q6" value="design" /> “Beauty will save the world.”<br />
+        </div>
+        <div class="quiz-question">
+          <label>7. You feel most effective when:</label><br />
+          <input type="radio" name="q7" value="systems" required /> Solving technical problems<br />
+          <input type="radio" name="q7" value="civil" /> Building coalitions<br />
+          <input type="radio" name="q7" value="resilience" /> Overcoming adversity<br />
+        </div>
+        <div class="quiz-question">
+          <label>8. Your thinking is:</label><br />
+          <input type="radio" name="q8" value="intelligence" required /> Fast and strategic<br />
+          <input type="radio" name="q8" value="philosophy" /> Deep and contemplative<br />
+          <input type="radio" name="q8" value="leadership" /> Focused and driven<br />
+        </div>
+        <div class="quiz-question">
+          <label>9. Which environment suits you best?</label><br />
+          <input type="radio" name="q9" value="wildcraft" required /> Wilderness and field labs<br />
+          <input type="radio" name="q9" value="systems" /> Labs or makerspaces<br />
+          <input type="radio" name="q9" value="design" /> Studios or galleries<br />
+        </div>
+        <div class="quiz-question">
+          <label>10. You hope to leave behind:</label><br />
+          <input type="radio" name="q10" value="philosophy" required /> Ideas and wisdom<br />
+          <input type="radio" name="q10" value="leadership" /> Legacy of strong leaders<br />
+          <input type="radio" name="q10" value="civil" /> Positive societal change<br />
+        </div>
+        <button type="submit" id="submit-quiz-btn">Submit</button>
+      </form>
+      <div id="quiz-results" tabindex="0" aria-live="polite"></div>
+      <div id="inspirational-msg"></div>
+    </div>
+  </section>
+
+  <section class="cta" tabindex="0">
+    <a href="application.html" aria-label="Apply to X Veritas Collegiate">Apply Now</a>
+  </section>
+
+</main>
+
+<footer>
+  &copy; 2025 X Veritas Collegiate. All rights reserved.
+</footer>
+
+<script>
+  // Scroll reveal fade-in effect
+  function revealSections() {
+    const sections = document.querySelectorAll('main section');
+    const triggerBottom = window.innerHeight * 0.85;
+
+    sections.forEach(section => {
+      const top = section.getBoundingClientRect().top;
+      if (top < triggerBottom) {
+        section.classList.add('visible');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', revealSections);
+  window.addEventListener('load', revealSections);
+
+  // Quiz logic
+  const startQuizBtn = document.getElementById('start-quiz-btn');
+  const quizContainer = document.getElementById('quiz-container');
+  const quizForm = document.getElementById('student-life-quiz');
+  const quizResults = document.getElementById('quiz-results');
+  const inspirationalMsg = document.getElementById('inspirational-msg');
+
+  startQuizBtn.addEventListener('click', () => {
+    const expanded = startQuizBtn.getAttribute('aria-expanded') === 'true';
+    startQuizBtn.setAttribute('aria-expanded', !expanded);
+    if (!expanded) {
+      quizContainer.classList.remove('hidden');
+      startQuizBtn.textContent = 'Hide the Quiz';
+      quizResults.textContent = '';
+      inspirationalMsg.textContent = '';
+      quizForm.reset();
+    } else {
+      quizContainer.classList.add('hidden');
+      startQuizBtn.textContent = 'Start the Quiz';
+      quizResults.textContent = '';
+      inspirationalMsg.innerHTML = getDefaultInspirationalMessage();
+      quizForm.reset();
+    }
+  });
+
+  function getDefaultInspirationalMessage() {
+    return `
+      <p>
+        Only the relentless will thrive here.<br />
+        Think carefully before you step forward — the path is demanding, the stakes high.
+      </p>
+    `;
+  }
+
+  function getPostQuizMessage() {
+    return `
+      <p>
+        You’ve taken the first step toward greatness — now steel yourself for the crucible ahead.<br />
+        Only the strong lead; only the worthy endure.
+      </p>
+    `;
+  }
+
+  quizForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const formData = new FormData(quizForm);
+    const counts = {};
+
+    for (const value of formData.values()) {
+      counts[value] = (counts[value] || 0) + 1;
+    }
+
+    // Find the highest count
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const topChoice = sorted.length ? sorted[0][0] : null;
+
+    // Map quiz values to official academic focuses exactly
+    const focusAreas = {
+      intelligence: "Strategic Intelligence & Decision Sciences",
+      leadership: "Leadership, Governance & Ethics",
+      resilience: "Human Resilience & Adaptive Psychology",
+      design: "Aesthetic Design & Classical Expression",
+      systems: "Systems Engineering & Tactical Innovation",
+      civil: "Civic Diplomacy & Global Negotiation",
+      wildcraft: "Field Sciences & Wildcraft Operations",
+      philosophy: "Philosophy, Logic & Intellectual Tradition",
+      diplomacy: "Civic Diplomacy & Global Negotiation"
+    };
+
+    if (topChoice && focusAreas[topChoice]) {
+      quizResults.innerHTML = `<p><strong>Recommended Academic Focus:</strong> ${focusAreas[topChoice]}</p>`;
+    } else {
+      quizResults.innerHTML = "<p>Please answer all questions to get a recommendation.</p>";
+    }
+
+    // Show the inspirational message after quiz submission
+    inspirationalMsg.innerHTML = getPostQuizMessage();
+
+    // Scroll results into view for user
+    quizResults.scrollIntoView({ behavior: "smooth" });
+
+    // Focus results for screen readers
+    quizResults.focus();
+  });
+
+  // On page load, show default inspirational message
+  window.addEventListener('load', () => {
+    inspirationalMsg.innerHTML = getDefaultInspirationalMessage();
+  });
+</script>
+
+</body>
+</html>
