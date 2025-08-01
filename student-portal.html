@@ -1,533 +1,877 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Student Portal - X Veritas Collegiate</title>
-  <style>
-    /* === Root colors + fonts === */
-    :root {
-      --black: #000000;
-      --white: #ffffff;
-      --oxblood: #8b1c1c;
-      --gold: #bfa45a;
-      --dark-gray: #222222;
-      --light-gray: #f5f5f5;
-      --font-serif: 'Merriweather', serif;
-      --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --transition: 0.4s ease;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: var(--font-sans);
-      background: var(--white);
-      color: var(--black);
-      line-height: 1.55;
-      scroll-behavior: smooth;
-    }
-    a {
-      color: var(--oxblood);
-      text-decoration: none;
-      cursor: pointer;
-      transition: color var(--transition);
-    }
-    a:hover, a:focus {
-      color: var(--gold);
-      outline: none;
-    }
-    h1, h2, h3 {
-      font-family: var(--font-serif);
-      margin: 0 0 0.5rem 0;
-      user-select: none;
-    }
-    h1 {
-      font-weight: 700;
-      font-size: 2rem;
-      color: var(--oxblood);
-      letter-spacing: 0.1em;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--oxblood);
-      margin-bottom: 1rem;
-      border-bottom: 2px solid var(--oxblood);
-      padding-bottom: 0.2rem;
-    }
-    h3 {
-      font-weight: 600;
-      font-size: 1.3rem;
-      color: var(--dark-gray);
-      margin-bottom: 1rem;
-    }
-    button {
-      background-color: var(--oxblood);
-      color: var(--white);
-      border: none;
-      padding: 0.5rem 1.2rem;
-      border-radius: 6px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button:hover, button:focus {
-      background-color: var(--gold);
-      color: var(--oxblood);
-      outline: none;
-    }
-    input, select, textarea {
-      font-family: var(--font-sans);
-      font-size: 1rem;
-      padding: 0.4rem 0.6rem;
-      border: 1.5px solid var(--oxblood);
-      border-radius: 6px;
-      width: 100%;
-      margin-bottom: 1rem;
-      transition: border-color 0.3s ease;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--gold);
-      outline: none;
-    }
-    textarea {
-      resize: vertical;
-    }
-    ul {
-      padding-left: 1.2rem;
-      margin-top: 0;
-    }
-    li {
-      margin-bottom: 0.3rem;
-    }
-    .card {
-      background: var(--light-gray);
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      margin-bottom: 2rem;
-    }
-    nav {
-      background: var(--white);
-      padding: 1rem 2rem;
-      border-bottom: 2px solid var(--oxblood);
-      display: flex;
-      gap: 2rem;
-      user-select: none;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    nav button {
-      background: none;
-      color: var(--oxblood);
-      font-weight: 700;
-      font-size: 1rem;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: color var(--transition);
-    }
-    nav button.active {
-      color: var(--gold);
-      border-bottom: 3px solid var(--gold);
-      padding-bottom: 0.2rem;
-    }
-    nav button:hover:not(.active),
-    nav button:focus:not(.active) {
-      color: var(--gold);
-      outline: none;
-    }
-    main {
-      max-width: 900px;
-      margin: 2rem auto 3rem;
-      padding: 0 1.5rem;
-    }
-    .portal-section {
-      display: none;
-      outline-offset: 3px;
-    }
-    .portal-section.active {
-      display: block;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>X Veritas Collegiate Student Portal</title>
 
-    /* === Home page slideshow === */
-    #slideshow {
-      position: relative;
-      width: 100%;
-      max-height: 300px;
-      overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-      user-select: none;
-    }
-    #slideshow img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      border-radius: 10px;
-    }
-    #slideshow img.active {
-      opacity: 1;
-      position: relative;
-    }
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans&display=swap');
 
-    /* === Quotes Section === */
-    #quotesSection {
-      background: var(--oxblood);
-      color: var(--gold);
-      padding: 1.5rem 2rem;
-      border-radius: 10px;
-      font-style: italic;
-      font-weight: 600;
-      font-size: 1.2rem;
-      min-height: 90px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-      margin-bottom: 2rem;
-      user-select: none;
-      text-align: center;
-      position: relative;
-    }
-    #quotesSection::before {
-      content: "“";
-      font-family: serif;
-      font-size: 3rem;
-      position: absolute;
-      top: -10px;
-      left: 10px;
-      opacity: 0.3;
-    }
-    #quotesSection::after {
-      content: "”";
-      font-family: serif;
-      font-size: 3rem;
-      position: absolute;
-      bottom: -10px;
-      right: 10px;
-      opacity: 0.3;
-    }
+  :root {
+    --black: #000000;
+    --white: #fefcf8;
+    --oxblood: #7a1212;
+    --gold: #c1a96e;
+    --cream: #f8f5ec;
+    --dark-gray: #444444;
+    --font-display: 'Merriweather', serif;
+    --font-sans: 'Open Sans', sans-serif;
+  }
 
-    /* === Home cards layout === */
-    #newsAndDeadlines {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .newsCard {
-      flex: 1 1 300px;
-      background: var(--light-gray);
-      border-radius: 10px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      user-select: none;
-    }
-    .newsCard h3 {
-      border-bottom: 1px solid var(--oxblood);
-      padding-bottom: 0.3rem;
-      margin-bottom: 1rem;
-      color: var(--oxblood);
-    }
-    .newsCard ul {
-      list-style: none;
-      padding-left: 0;
-      margin-top: 0;
-    }
-    .newsCard ul li {
-      background: var(--white);
-      padding: 0.5rem 0.8rem;
-      margin-bottom: 0.5rem;
-      border-radius: 6px;
-      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      color: var(--dark-gray);
-      font-size: 1rem;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    /* Emoji style inside list */
-    .newsCard ul li span.emoji {
-      font-size: 1.3rem;
-      line-height: 1;
-      user-select: none;
-    }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--dark-gray);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
 
-    /* Messages styling */
-    #inbox {
-      width: 28%;
-      background: var(--light-gray);
-      border-radius: 8px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      height: 500px;
-    }
-    #inbox h2 {
-      padding: 1rem;
-      margin: 0;
-      color: var(--oxblood);
-      border-bottom: 1px solid var(--oxblood);
-      font-size: 1.3rem;
-    }
-    #chatList {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    #chatList li {
-      padding: 0.9rem 1rem;
-      border-bottom: 1px solid #ccc;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 600;
-      color: var(--dark-gray);
-    }
-    #chatList li:hover, #chatList li.active {
-      background-color: var(--oxblood);
-      color: var(--white);
-    }
-    #chatWindow {
-      flex-grow: 1;
-      background: var(--white);
-      border-radius: 8px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      max-height: 500px;
-    }
-    #chatHeader {
-      padding: 1rem;
-      border-bottom: 1px solid var(--light-gray);
-      font-weight: 700;
-      color: var(--oxblood);
-      font-size: 1.2rem;
-    }
-    #messageThread {
-      padding: 1rem;
-      overflow-y: auto;
-      flex-grow: 1;
-      background: #fafafa;
-      font-size: 0.95rem;
-    }
-    .message {
-      margin-bottom: 1rem;
-      max-width: 75%;
-      padding: 0.6rem 1rem;
-      border-radius: 20px;
-      clear: both;
-      word-wrap: break-word;
-    }
-    .message.sent {
-      background-color: var(--oxblood);
-      color: white;
-      float: right;
-      border-bottom-right-radius: 0;
-    }
-    .message.received {
-      background-color: var(--light-gray);
-      color: var(--black);
-      float: left;
-      border-bottom-left-radius: 0;
-    }
-    #messageInput {
-      width: 100%;
-      resize: none;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1.5px solid var(--oxblood);
-      font-family: var(--font-sans);
-      font-size: 1rem;
-      height: 60px;
-      margin-top: 0.5rem;
-    }
+  header {
+    background: var(--oxblood);
+    color: var(--gold);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    user-select: none;
+  }
+  header img#crest {
+    height: 56px;
+    width: 56px;
+    object-fit: contain;
+    filter: none; /* no glow */
+  }
 
-    /* Settings profile picture */
-    #profilePictureContainer {
-      margin-bottom: 2rem;
-      text-align: center;
-      position: relative;
-    }
-    #profilePicture {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--oxblood);
-      cursor: pointer;
-      transition: box-shadow 0.3s ease;
-    }
-    #profilePicture:hover {
-      box-shadow: 0 0 10px var(--oxblood);
-    }
+  nav {
+    display: flex;
+    gap: 1rem;
+    background: var(--oxblood);
+    padding: 1rem 2rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  nav button {
+    background: transparent;
+    border: none;
+    color: var(--gold);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+  nav button.active,
+  nav button:hover,
+  nav button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+  nav button.logout {
+    margin-left: auto;
+    font-weight: 700;
+  }
 
-    /* Responsive */
-    @media (max-width: 720px) {
-      #messages, #inbox {
-        flex-direction: column;
-        height: auto;
-      }
-      #inbox {
-        width: 100%;
-        max-height: 200px;
-        height: 200px;
-      }
-      #chatWindow {
-        max-height: 300px;
-      }
-      #newsAndDeadlines {
-        flex-direction: column;
-      }
-    }
-  </style>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  main {
+    max-width: 960px;
+    margin: 1.5rem auto 3rem;
+    padding: 0 1rem;
+  }
+
+  section.portal-section {
+    display: none;
+    outline: none;
+  }
+  section.portal-section.active {
+    display: block;
+  }
+
+  /* --- Home Section --- */
+  #home h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--oxblood);
+    margin-bottom: 0.3rem;
+  }
+  #home .slideshow {
+    position: relative;
+    height: 300px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(122,18,18,0.25);
+    margin-bottom: 1rem;
+  }
+  #home .slideshow img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  #home .slideshow img.active {
+    opacity: 1;
+    position: relative;
+  }
+
+  #quoteBox {
+    font-style: italic;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--oxblood);
+    border-left: 4px solid var(--gold);
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+    min-height: 4.5rem;
+    user-select: none;
+  }
+
+  .news-deadlines {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .newsCard {
+    background: var(--white);
+    box-shadow: 0 6px 18px rgba(122,18,18,0.15);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    flex: 1 1 45%;
+    color: var(--dark-gray);
+  }
+  .newsCard h3 {
+    color: var(--oxblood);
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: 0.7rem;
+  }
+  .newsCard ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .newsCard li {
+    margin-bottom: 0.45rem;
+    font-size: 1rem;
+  }
+  .emoji {
+    margin-right: 0.6rem;
+  }
+
+  /* --- Assignments Section --- */
+  #assignments h2 {
+    font-family: var(--font-display);
+    color: var(--oxblood);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  #assignments .card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(122,18,18,0.2);
+  }
+  #assignments form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 480px;
+  }
+  #assignments label {
+    font-weight: 700;
+    color: var(--oxblood);
+  }
+  #assignments select, #assignments input[type="file"] {
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    border: 2px solid var(--oxblood);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+  }
+  #assignments button {
+    background: var(--oxblood);
+    color: var(--gold);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    max-width: 160px;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+  }
+  #assignments button:hover,
+  #assignments button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+  #submittedAssignments {
+    margin-top: 1.5rem;
+  }
+  #submittedAssignments li {
+    margin-bottom: 0.4rem;
+  }
+
+  /* --- Exams Section --- */
+  #exams h2 {
+    font-family: var(--font-display);
+    color: var(--oxblood);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  #exams select, #exams button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--oxblood);
+    font-family: var(--font-sans);
+  }
+  #exams button {
+    background: var(--oxblood);
+    color: var(--gold);
+    font-weight: 700;
+    margin-left: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #exams button:hover, #exams button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+  #examTable {
+    width: 100%;
+    margin-top: 1.5rem;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+  }
+  #examTable th, #examTable td {
+    border: 1px solid var(--oxblood);
+    padding: 0.6rem 1rem;
+    text-align: left;
+  }
+  #examTable th {
+    background: var(--oxblood);
+    color: var(--gold);
+  }
+  #examDetails {
+    margin-top: 1rem;
+    background: var(--white);
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(122,18,18,0.15);
+    max-height: 250px;
+    overflow-y: auto;
+    font-family: var(--font-sans);
+  }
+
+  /* --- Inbox Section --- */
+  #inbox {
+    display: flex;
+    gap: 1rem;
+    height: 500px;
+  }
+  #chatSidebar {
+    width: 28%;
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(122,18,18,0.1);
+    overflow-y: auto;
+    padding: 1rem;
+  }
+  #chatSidebar h2 {
+    color: var(--oxblood);
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-top: 0;
+  }
+  #chatList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  #chatList li {
+    padding: 0.7rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--dark-gray);
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+  }
+  #chatList li.active,
+  #chatList li:hover,
+  #chatList li:focus {
+    background: var(--oxblood);
+    color: var(--gold);
+    outline: none;
+  }
+  #chatWindow {
+    flex-grow: 1;
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(122,18,18,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  #chatHeader {
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--oxblood);
+    font-weight: 700;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--oxblood);
+  }
+  #messageThread {
+    padding: 1rem 1.5rem;
+    flex-grow: 1;
+    overflow-y: auto;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    background: #f7f5f1;
+  }
+  .message {
+    max-width: 70%;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1rem;
+    border-radius: 20px;
+    word-wrap: break-word;
+  }
+  .message.sent {
+    background-color: var(--oxblood);
+    color: var(--gold);
+    margin-left: auto;
+    border-bottom-right-radius: 0;
+  }
+  .message.received {
+    background-color: var(--gold);
+    color: var(--oxblood);
+    border-bottom-left-radius: 0;
+  }
+  #messageForm {
+    padding: 1rem 1.5rem;
+    border-top: 2px solid var(--oxblood);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  #messageForm select, #messageForm input[type="text"], #messageForm textarea {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid var(--oxblood);
+    padding: 0.5rem 0.8rem;
+  }
+  #messageForm select, #messageForm input[type="text"] {
+    width: 25%;
+  }
+  #messageForm textarea {
+    flex-grow: 1;
+    height: 60px;
+    resize: none;
+  }
+  #messageForm button {
+    background: var(--oxblood);
+    color: var(--gold);
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #messageForm button:hover,
+  #messageForm button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+
+  /* --- Calendar Section --- */
+  #calendar {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(122,18,18,0.2);
+    padding: 2rem;
+  }
+  #calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--oxblood);
+    margin-bottom: 1rem;
+  }
+  #calendarHeader button {
+    background: var(--oxblood);
+    color: var(--gold);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #calendarHeader button:hover,
+  #calendarHeader button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+  table#calendarTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: var(--font-sans);
+  }
+  #calendarTable th, #calendarTable td {
+    padding: 0.6rem;
+    border: 1px solid var(--oxblood);
+  }
+  #calendarTable th {
+    background: var(--oxblood);
+    color: var(--gold);
+  }
+  #calendarTable td {
+    height: 70px;
+    vertical-align: top;
+    cursor: pointer;
+    position: relative;
+  }
+  #calendarTable td:hover {
+    background: #f1e8cc;
+  }
+  #calendarTable td .event {
+    background: var(--oxblood);
+    color: var(--gold);
+    font-size: 0.75rem;
+    border-radius: 6px;
+    padding: 2px 5px;
+    margin-top: 3px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Modal for adding events */
+  #eventModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right:0; bottom:0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+  }
+  #eventModal.active {
+    display: flex;
+  }
+  #eventModalContent {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(122,18,18,0.3);
+  }
+  #eventModalContent h3 {
+    margin-top: 0;
+    color: var(--oxblood);
+    font-family: var(--font-display);
+    margin-bottom: 1rem;
+  }
+  #eventModalContent label {
+    font-weight: 700;
+    color: var(--oxblood);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  #eventModalContent input, #eventModalContent textarea, #eventModalContent select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: var(--font-sans);
+    border-radius: 8px;
+    border: 2px solid var(--oxblood);
+    margin-bottom: 1rem;
+  }
+  #eventModalContent button {
+    background: var(--oxblood);
+    color: var(--gold);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #eventModalContent button:hover,
+  #eventModalContent button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+
+  /* --- Settings Section --- */
+  #settings .card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(122,18,18,0.2);
+  }
+  #settings h2 {
+    font-family: var(--font-display);
+    color: var(--oxblood);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  #settings label {
+    font-weight: 700;
+    color: var(--oxblood);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  #settings input, #settings select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--oxblood);
+  }
+  #settings input[type="file"] {
+    padding: 0.2rem 0.4rem;
+  }
+  #settings button {
+    background: var(--oxblood);
+    color: var(--gold);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  #settings button:hover,
+  #settings button:focus {
+    background: var(--gold);
+    color: var(--oxblood);
+    outline: none;
+  }
+
+</style>
 </head>
 <body>
 
-<nav role="navigation" aria-label="Student portal navigation">
-  <button class="active" data-target="home" aria-controls="home" aria-selected="true">Home</button>
-  <button data-target="assignments" aria-controls="assignments" aria-selected="false">Assignments</button>
-  <button data-target="inbox" aria-controls="inbox" aria-selected="false">Inbox</button>
-  <button data-target="tests" aria-controls="tests" aria-selected="false">Exams</button>
-  <button data-target="settings" aria-controls="settings" aria-selected="false">Settings</button>
-  <button onclick="logout()" style="margin-left:auto; background:none; color: var(--oxblood); font-weight: 700; border:none; cursor:pointer;">Logout</button>
+<header>
+  <img src="crest.png" alt="X Veritas Collegiate Crest" id="crest" />
+  X Veritas Collegiate
+</header>
+
+<nav aria-label="Primary navigation">
+  <button id="navHome" class="active" aria-controls="home" aria-selected="true">Home</button>
+  <button id="navAssignments" aria-controls="assignments" aria-selected="false">Assignments</button>
+  <button id="navExams" aria-controls="exams" aria-selected="false">Exams</button>
+  <button id="navInbox" aria-controls="inbox" aria-selected="false">Inbox</button>
+  <button id="navCalendar" aria-controls="calendar" aria-selected="false">Calendar</button>
+  <button id="navSettings" aria-controls="settings" aria-selected="false">Settings</button>
+  <button id="logoutBtn" class="logout">Logout</button>
 </nav>
 
 <main>
-  <!-- Home Section -->
-  <section id="home" class="portal-section active" tabindex="0" aria-label="Home dashboard">
-    <h1>Welcome to X Veritas Collegiate</h1>
 
-    <div id="slideshow" aria-label="School image slideshow" role="region" aria-live="polite">
-      <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80" alt="Campus building" class="active" />
-      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80" alt="Students studying outdoors" />
-      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80" alt="Library interior" />
+  <!-- HOME -->
+  <section id="home" class="portal-section active" tabindex="0" aria-live="polite">
+    <h1>Welcome Back, Student</h1>
+    <div class="slideshow" aria-label="Student life slideshow">
+      <img src="student1.jpg" alt="Students collaborating in classroom" class="active" />
+      <img src="student2.jpg" alt="Group study session" />
+      <img src="student3.jpg" alt="Graduation ceremony" />
+      <img src="student4.jpg" alt="Students working on computers" />
     </div>
 
-    <div id="quotesSection" aria-live="polite" aria-atomic="true" aria-relevant="text">
-      Loading inspirational quotes...
-    </div>
+    <div id="quoteBox" aria-live="polite" aria-atomic="true"></div>
 
-    <div id="newsAndDeadlines">
-      <article class="newsCard" aria-label="School news">
+    <div class="news-deadlines" aria-label="News and deadlines">
+      <article class="newsCard" tabindex="0">
         <h3>📢 Latest News</h3>
         <ul>
-          <li><span class="emoji">📅</span> Orientation starts Monday, Aug 5th</li>
-          <li><span class="emoji">📚</span> Textbook pickup open 9AM–3PM</li>
-          <li><span class="emoji">🏫</span> Campus tours daily at 1PM</li>
+          <li>Fall semester begins Sept 3</li>
+          <li>New library resources now available</li>
+          <li>Thesis submission deadline: Dec 10</li>
         </ul>
       </article>
 
-      <article class="newsCard" aria-label="Upcoming deadlines">
+      <article class="newsCard" tabindex="0">
         <h3>⏰ Upcoming Deadlines</h3>
         <ul>
-          <li><span class="emoji">✏️</span> Math Homework #1 - Due Aug 6</li>
-          <li><span class="emoji">📝</span> Intro Essay - Due Aug 10</li>
-          <li><span class="emoji">📸</span> Student ID Photo Upload - Due Aug 8</li>
+          <li>Assignments due Sept 15</li>
+          <li>Midterm exams start Oct 1</li>
+          <li>Orientation materials due Sept 7</li>
         </ul>
       </article>
     </div>
   </section>
 
-  <!-- Assignments Section -->
-  <section id="assignments" class="portal-section" tabindex="0" aria-label="Assignments upload and list">
+  <!-- ASSIGNMENTS -->
+  <section id="assignments" class="portal-section" tabindex="0" aria-live="polite">
+    <h2>Submit Assignments</h2>
     <div class="card">
-      <h2>Your Assignments</h2>
-      <label for="departmentSelect"><strong>Select Department / Teacher:</strong></label>
-      <select id="departmentSelect" aria-label="Select department or teacher">
-        <option value="orientation">Orientation Materials</option>
-        <option value="math">Mathematics</option>
-        <option value="english">English</option>
-        <option value="science">Science</option>
-        <option value="history">History</option>
-      </select>
-      <input type="file" id="uploadAssignment" aria-label="Upload assignment file" />
-      <button onclick="uploadDocument()">Upload</button>
-      <div id="assignmentList" style="margin-top: 1rem;"></div>
-    </div>
-  </section>
-
-  <!-- Inbox Section -->
-  <section id="inbox" class="portal-section" tabindex="0" aria-label="Inbox and messages" style="display:flex; gap:1rem; height:500px;">
-    <!-- Inbox sidebar -->
-    <aside id="inboxSidebar" aria-label="Inbox sidebar" style="width: 28%; background: var(--light-gray); border-radius: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); overflow-y: auto;">
-      <h2>Inbox</h2>
-      <ul id="chatList" role="listbox" aria-label="List of chats" tabindex="0" style="list-style:none; margin:0; padding:0;">
-        <!-- Chats inserted by JS -->
-      </ul>
-    </aside>
-
-    <!-- Chat conversation -->
-    <section id="chatWindow" aria-live="polite" aria-atomic="true" aria-relevant="additions" style="flex-grow: 1; background: var(--white); border-radius: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.1); display:flex; flex-direction: column; max-height: 500px;">
-      <header id="chatHeader" style="padding: 1rem; border-bottom: 1px solid var(--light-gray); font-weight: 700; color: var(--oxblood); font-size: 1.2rem;">
-        Select a chat
-      </header>
-      <div id="messageThread" style="padding: 1rem; overflow-y: auto; flex-grow: 1; background: #fafafa; font-size: 0.95rem;"></div>
-      <div style="padding: 1rem; border-top: 1px solid var(--light-gray);">
-        <textarea id="messageInput" rows="3" placeholder="Type a message..." aria-label="Type your message here"></textarea>
-        <button onclick="sendMessage()" style="margin-top: 0.5rem;">Send</button>
-      </div>
-    </section>
-  </section>
-
-  <!-- Exams Section -->
-  <section id="tests" class="portal-section" tabindex="0" aria-label="Exams and quizzes">
-    <div class="card">
-      <h2>Exams & Quizzes</h2>
-      <p>Feature coming soon!</p>
-    </div>
-  </section>
-
-  <!-- Settings Section -->
-  <section id="settings" class="portal-section" tabindex="0" aria-label="User account settings">
-    <div class="card" style="max-width: 400px; margin: 0 auto;">
-      <h2>Your Profile</h2>
-      <div id="profilePictureContainer">
-        <img id="profilePicture" src="https://via.placeholder.com/120x120.png?text=Profile" alt="Profile picture, click to change" tabindex="0" />
-        <input type="file" id="avatarInput" accept="image/*" style="display:none;" aria-label="Upload new profile picture" />
-      </div>
-
-      <form id="settingsForm">
-        <label for="recoveryEmail">Recovery Email</label>
-        <input type="email" id="recoveryEmail" name="recoveryEmail" placeholder="you@example.com" />
-
-        <label for="recoveryPhone">Recovery Phone</label>
-        <input type="tel" id="recoveryPhone" name="recoveryPhone" placeholder="+1 555 555 5555" />
-
-        <label for="password">New Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter new password" />
-
-        <label for="confirmPassword">Confirm New Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" />
-
-        <label for="securityQuestion">Security Question</label>
-        <select id="securityQuestion" name="securityQuestion">
-          <option value="">-- Select a question --</option>
-          <option value="motherMaiden">What is your mother's maiden name?</option>
-          <option value="firstPet">What was the name of your first pet?</option>
-          <option value="firstSchool">What was the name of your first school?</option>
+      <form id="assignmentForm" aria-label="Assignment submission form">
+        <label for="assignmentSubject">Select Subject:</label>
+        <select id="assignmentSubject" name="assignmentSubject" required>
+          <option value="">-- Choose Subject --</option>
+          <!-- Year I -->
+          <option>Logic</option>
+          <option>Rhetoric</option>
+          <option>Systems Analysis</option>
+          <option>Tactical Mathematics</option>
+          <option>Critical Ethics</option>
+          <!-- Year II -->
+          <option>Complex Simulations</option>
+          <option>Interdisciplinary Strategy</option>
+          <option>Code & Cipher</option>
+          <option>Advanced Decision Sciences</option>
+          <!-- Year III -->
+          <option>Strategic Intelligence & Analysis</option>
+          <option>Advanced Engineering & Technology</option>
+          <option>Leadership Studies & Ethics</option>
+          <option>Cyber Operations & Defense</option>
+          <option>Communications & Media Strategy</option>
+          <!-- Year IV -->
+          <option>Thesis Initiative</option>
+          <option>Lab Deployments</option>
+          <option>Public Defense Panels</option>
+          <!-- Orientation -->
+          <option>Orientation Materials</option>
         </select>
-        <input type="text" id="securityAnswer" name="securityAnswer" placeholder="Your answer" />
+
+        <label for="assignmentFile">Upload File:</label>
+        <input type="file" id="assignmentFile" name="assignmentFile" accept=".pdf,.doc,.docx,.txt" required />
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <div id="submittedAssignments" aria-live="polite" aria-atomic="true" style="margin-top:1rem;">
+        <h3>Your Submitted Assignments:</h3>
+        <ul id="assignmentsList" aria-label="List of submitted assignments"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXAMS -->
+  <section id="exams" class="portal-section" tabindex="0" aria-live="polite">
+    <h2>Exams</h2>
+
+    <label for="examSubject">Select Subject to View or Take Exams:</label>
+    <select id="examSubject" aria-describedby="examHelp">
+      <option value="">-- Choose Subject --</option>
+      <!-- Same subject list -->
+      <option>Logic</option>
+      <option>Rhetoric</option>
+      <option>Systems Analysis</option>
+      <option>Tactical Mathematics</option>
+      <option>Critical Ethics</option>
+      <option>Complex Simulations</option>
+      <option>Interdisciplinary Strategy</option>
+      <option>Code & Cipher</option>
+      <option>Advanced Decision Sciences</option>
+      <option>Strategic Intelligence & Analysis</option>
+      <option>Advanced Engineering & Technology</option>
+      <option>Leadership Studies & Ethics</option>
+      <option>Cyber Operations & Defense</option>
+      <option>Communications & Media Strategy</option>
+      <option>Thesis Initiative</option>
+      <option>Lab Deployments</option>
+      <option>Public Defense Panels</option>
+      <option>Orientation Materials</option>
+    </select>
+
+    <button id="loadExamsBtn">Load Exams</button>
+
+    <p id="examHelp" style="font-size: 0.9rem; margin-top: 0.2rem; color: var(--dark-gray);">
+      Select a subject to view available exams. If an exam is available, you can take it online. Once graded, your results will appear here.
+    </p>
+
+    <table id="examTable" aria-label="Exams table" style="margin-top:1.5rem;">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Credits</th>
+          <th>Teacher</th>
+          <th>Grade</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody id="examTableBody">
+        <!-- Dynamically generated exam rows -->
+      </tbody>
+    </table>
+
+    <div id="examDetails" aria-live="polite" aria-atomic="true" style="display:none;">
+      <!-- Detailed breakdown of selected exam -->
+    </div>
+
+  </section>
+
+  <!-- INBOX -->
+  <section id="inbox" class="portal-section" tabindex="0" aria-live="polite">
+    <div id="chatSidebar" aria-label="Department chat list">
+      <h2>Departments</h2>
+      <ul id="chatList" role="listbox" tabindex="0" aria-label="Select a department to chat">
+        <li role="option" tabindex="0" data-dept="IT">Information Technology</li>
+        <li role="option" tabindex="0" data-dept="Admissions">Dean of Admissions</li>
+        <li role="option" tabindex="0" data-dept="President">President of the Collegiate</li>
+        <li role="option" tabindex="0" data-dept="Faculty">Faculty Affairs</li>
+        <li role="option" tabindex="0" data-dept="Registrar">Registrar's Office</li>
+        <li role="option" tabindex="0" data-dept="Library">Library Services</li>
+      </ul>
+    </div>
+    <div id="chatWindow" aria-label="Chat window with selected department">
+      <div id="chatHeader">Select a Department to Begin</div>
+      <div id="messageThread" aria-live="polite"></div>
+
+      <form id="messageForm" aria-label="Send message form">
+        <select id="messageRecipient" name="messageRecipient" aria-label="Select department recipient" required>
+          <option value="">Select Department</option>
+          <option value="IT">Information Technology</option>
+          <option value="Admissions">Dean of Admissions</option>
+          <option value="President">President of the Collegiate</option>
+          <option value="Faculty">Faculty Affairs</option>
+          <option value="Registrar">Registrar's Office</option>
+          <option value="Library">Library Services</option>
+        </select>
+
+        <input type="text" id="messageSubject" name="messageSubject" placeholder="Subject" aria-label="Message subject" required />
+
+        <textarea id="messageBody" name="messageBody" placeholder="Type your message..." aria-label="Message body" required></textarea>
+
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section id="calendar" class="portal-section" tabindex="0" aria-live="polite">
+    <div id="calendarHeader" role="region" aria-label="Calendar navigation">
+      <button id="prevMonthBtn" aria-label="Previous month">&lt;</button>
+      <div id="monthYearLabel" aria-live="polite" aria-atomic="true" style="font-weight:700; font-family: var(--font-display); font-size:1.4rem;"></div>
+      <button id="nextMonthBtn" aria-label="Next month">&gt;</button>
+    </div>
+
+    <table id="calendarTable" role="grid" aria-label="Calendar days">
+      <thead>
+        <tr>
+          <th scope="col">Sun</th>
+          <th scope="col">Mon</th>
+          <th scope="col">Tue</th>
+          <th scope="col">Wed</th>
+          <th scope="col">Thu</th>
+          <th scope="col">Fri</th>
+          <th scope="col">Sat</th>
+        </tr>
+      </thead>
+      <tbody id="calendarBody"></tbody>
+    </table>
+
+    <button id="addEventBtn" aria-label="Add new calendar event" style="margin-top:1rem;">Add Event</button>
+
+    <!-- Modal for adding events -->
+    <div id="eventModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div id="eventModalContent">
+        <h3 id="modalTitle">Add New Event</h3>
+        <form id="eventForm">
+          <label for="eventDate">Date:</label>
+          <input type="date" id="eventDate" required />
+
+          <label for="eventTitle">Event Title:</label>
+          <input type="text" id="eventTitle" required />
+
+          <label for="eventDescription">Description:</label>
+          <textarea id="eventDescription" rows="3"></textarea>
+
+          <label for="eventType">Type:</label>
+          <select id="eventType" required>
+            <option value="General">General</option>
+            <option value="Exam">Exam</option>
+            <option value="Deadline">Deadline</option>
+            <option value="Meeting">Meeting</option>
+          </select>
+
+          <button type="submit">Save Event</button>
+          <button type="button" id="cancelEventBtn" style="margin-left:10px;">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="settings" class="portal-section" tabindex="0" aria-live="polite">
+    <div class="card">
+      <h2>Profile Settings</h2>
+
+      <form id="settingsForm" aria-label="Profile settings form">
+        <label for="profilePic">Profile Picture:</label>
+        <input type="file" id="profilePic" accept="image/*" />
+
+        <label for="recoveryEmail">Recovery Email:</label>
+        <input type="email" id="recoveryEmail" placeholder="you@example.com" />
+
+        <label for="recoveryPhone">Recovery Phone Number:</label>
+        <input type="tel" id="recoveryPhone" placeholder="+1 555 555 5555" />
+
+        <label for="securityQuestion">Security Question:</label>
+        <select id="securityQuestion">
+          <option value="">Select a question...</option>
+          <option>What was the name of your first pet?</option>
+          <option>What is your mother's maiden name?</option>
+          <option>What was the name of your elementary school?</option>
+          <option>What city were you born in?</option>
+        </select>
+
+        <label for="securityAnswer">Answer:</label>
+        <input type="text" id="securityAnswer" />
+
+        <label for="currentPassword">Current Password:</label>
+        <input type="password" id="currentPassword" placeholder="Enter current password" />
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" placeholder="Enter new password" />
+
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password" />
 
         <button type="submit">Save Settings</button>
       </form>
     </div>
   </section>
+
 </main>
 
 <script>
-  // Navigation tab switching
-  const navButtons = document.querySelectorAll('nav button[data-target]');
-  const sections = document.querySelectorAll('.portal-section');
+  // Navigation and section switching
+  const navButtons = document.querySelectorAll('nav button:not(.logout)');
+  const sections = document.querySelectorAll('section.portal-section');
 
   navButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -538,222 +882,409 @@
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
 
-      const target = btn.getAttribute('data-target');
       sections.forEach(sec => {
-        if (sec.id === target) {
-          sec.classList.add('active');
-          sec.style.display = target === 'inbox' ? 'flex' : 'block';
-          sec.focus();
-        } else {
-          sec.classList.remove('active');
-          sec.style.display = 'none';
-        }
+        sec.classList.remove('active');
       });
+      const targetId = btn.getAttribute('aria-controls');
+      document.getElementById(targetId).classList.add('active');
+      document.getElementById(targetId).focus();
     });
   });
 
-  // Slideshow logic for home
-  const slides = document.querySelectorAll('#slideshow img');
-  let currentSlide = 0;
+  // Logout button redirects to login.html
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    alert("You have been logged out.");
+    window.location.href = 'login.html';
+  });
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
+  // Home page slideshow logic
+  const slideshowImgs = document.querySelectorAll('#home .slideshow img');
+  let slideIndex = 0;
+  function showSlide() {
+    slideshowImgs.forEach((img, idx) => {
+      img.classList.toggle('active', idx === slideIndex);
     });
+    slideIndex = (slideIndex + 1) % slideshowImgs.length;
   }
+  setInterval(showSlide, 5000);
 
-  function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length;
-    showSlide(currentSlide);
-  }
-
-  setInterval(nextSlide, 5000); // change every 5 seconds
-
-  // Quotes rotating
+  // Quotes array - Bible, Motivational, Scientific
   const quotes = [
-    "Trust in the LORD with all your heart and lean not on your own understanding. - Proverbs 3:5",
-    "For I know the plans I have for you, declares the LORD. - Jeremiah 29:11",
-    "Be strong and courageous. Do not be afraid; do not be discouraged. - Joshua 1:9",
-    "Let all that you do be done in love. - 1 Corinthians 16:14",
-    "The joy of the LORD is your strength. - Nehemiah 8:10",
-    "Commit to the LORD whatever you do, and your plans will succeed. - Proverbs 16:3",
-    "I can do all things through Christ who strengthens me. - Philippians 4:13"
+    "“I can do all things through Christ who strengthens me.” – Philippians 4:13",
+    "“The best way to predict the future is to create it.” – Peter Drucker",
+    "“Education is the most powerful weapon which you can use to change the world.” – Nelson Mandela",
+    "“Science is organized knowledge.” – Herbert Spencer",
+    "“Do not be conformed to this world, but be transformed by the renewing of your mind.” – Romans 12:2",
+    "“Success is not final, failure is not fatal: it is the courage to continue that counts.” – Winston Churchill",
+    "“Somewhere, something incredible is waiting to be known.” – Carl Sagan",
+    "“Trust in the Lord with all your heart and lean not on your own understanding.” – Proverbs 3:5",
+    "“The only limit to our realization of tomorrow will be our doubts of today.” – Franklin D. Roosevelt",
+    "“Research is creating new knowledge.” – Neil Armstrong"
   ];
-  const quotesEl = document.getElementById('quotesSection');
+  const quoteBox = document.getElementById('quoteBox');
   let quoteIndex = 0;
-
-  function showQuote(index) {
-    quotesEl.textContent = quotes[index];
-  }
-
-  function nextQuote() {
+  function updateQuote() {
+    quoteBox.textContent = quotes[quoteIndex];
     quoteIndex = (quoteIndex + 1) % quotes.length;
-    showQuote(quoteIndex);
   }
+  updateQuote();
+  setInterval(updateQuote, 8000);
 
-  showQuote(quoteIndex);
-  setInterval(nextQuote, 8000);
+  // Assignments Form
+  const assignmentForm = document.getElementById('assignmentForm');
+  const assignmentsList = document.getElementById('assignmentsList');
+  let submittedAssignments = [];
 
-  // Assignments upload functionality
-  const assignmentListEl = document.getElementById('assignmentList');
-  const assignments = {};
-
-  function uploadDocument() {
-    const dept = document.getElementById('departmentSelect').value;
-    const fileInput = document.getElementById('uploadAssignment');
-    if (!fileInput.files.length) {
-      alert('Please select a file to upload.');
+  assignmentForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const subject = assignmentForm.assignmentSubject.value;
+    const fileInput = assignmentForm.assignmentFile;
+    if (!subject || fileInput.files.length === 0) {
+      alert('Please select a subject and upload a file.');
       return;
     }
-    const file = fileInput.files[0];
-
-    if (!assignments[dept]) assignments[dept] = [];
-    assignments[dept].push(file.name);
-
-    // Clear input
-    fileInput.value = '';
-
+    const fileName = fileInput.files[0].name;
+    submittedAssignments.push({subject, fileName, date: new Date().toLocaleString()});
     renderAssignments();
-  }
+    assignmentForm.reset();
+  });
 
   function renderAssignments() {
-    assignmentListEl.innerHTML = '';
-    for (const dept in assignments) {
-      const div = document.createElement('div');
-      div.innerHTML = `<h3>${dept.charAt(0).toUpperCase() + dept.slice(1)} Department</h3>`;
-      const ul = document.createElement('ul');
-      assignments[dept].forEach(filename => {
-        const li = document.createElement('li');
-        li.textContent = filename;
-        ul.appendChild(li);
-      });
-      div.appendChild(ul);
-      assignmentListEl.appendChild(div);
-    }
-  }
-
-  // Inbox / messages setup
-  const chatListEl = document.getElementById('chatList');
-  const chatHeaderEl = document.getElementById('chatHeader');
-  const messageThreadEl = document.getElementById('messageThread');
-  const messageInputEl = document.getElementById('messageInput');
-
-  let currentChatId = null;
-
-  // Sample chats
-  const chats = [
-    {
-      id: 'teacher1',
-      name: 'Mrs. Johnson (Math)',
-      messages: [
-        { from: 'teacher', text: 'Hello, please remember to submit your homework by Friday.' },
-        { from: 'student', text: 'Thanks, I will!' },
-      ]
-    },
-    {
-      id: 'advisor',
-      name: 'Student Advisor',
-      messages: [
-        { from: 'advisor', text: 'Don’t forget the orientation on Monday.' },
-      ]
-    },
-    {
-      id: 'principal',
-      name: 'Principal Office',
-      messages: [
-        { from: 'principal', text: 'Welcome back to school! Stay safe and focused.' },
-      ]
-    }
-  ];
-
-  function renderChatList() {
-    chatListEl.innerHTML = '';
-    chats.forEach(chat => {
+    assignmentsList.innerHTML = '';
+    submittedAssignments.forEach((a, i) => {
       const li = document.createElement('li');
-      li.textContent = chat.name;
-      li.setAttribute('role', 'option');
-      li.setAttribute('tabindex', '0');
-      li.dataset.chatId = chat.id;
-      li.addEventListener('click', () => openChat(chat.id));
-      li.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openChat(chat.id);
-        }
-      });
-      if (chat.id === currentChatId) {
-        li.classList.add('active');
-      }
-      chatListEl.appendChild(li);
+      li.textContent = `${a.subject} — ${a.fileName} (submitted on ${a.date})`;
+      assignmentsList.appendChild(li);
     });
   }
 
-  function openChat(id) {
-    currentChatId = id;
-    renderChatList();
-    const chat = chats.find(c => c.id === id);
-    chatHeaderEl.textContent = chat.name;
-    renderMessages(chat.messages);
-    messageInputEl.focus();
-  }
+  // Exams Section - simulate exams uploaded by staff, allow taking and grading
+  const examSubjectSelect = document.getElementById('examSubject');
+  const loadExamsBtn = document.getElementById('loadExamsBtn');
+  const examTableBody = document.getElementById('examTableBody');
+  const examDetails = document.getElementById('examDetails');
 
-  function renderMessages(messages) {
-    messageThreadEl.innerHTML = '';
-    messages.forEach(msg => {
-      const div = document.createElement('div');
-      div.classList.add('message');
-      div.classList.add(msg.from === 'student' ? 'sent' : 'received');
-      div.textContent = msg.text;
-      messageThreadEl.appendChild(div);
-    });
-    messageThreadEl.scrollTop = messageThreadEl.scrollHeight;
-  }
+  // Sample exams database (in-memory)
+  const examsDB = {
+    'Logic': [
+      {course: 'Logic', credits: 3, teacher: 'Prof. Smith', grade: null, examContent: 'Q1: Define logic.\nQ2: Explain syllogism.', answers: null},
+    ],
+    'Orientation Materials': [
+      {course: 'Orientation Materials', credits: 1, teacher: 'Dean Lee', grade: 92, examContent: 'Q1: What is the campus motto?', answers: 'A1: Truth and Honor.'},
+    ]
+    // ... add more exams per subject as needed
+  };
 
-  function sendMessage() {
-    if (!currentChatId) {
-      alert('Please select a chat first.');
+  // When user clicks "Load Exams"
+  loadExamsBtn.addEventListener('click', () => {
+    const subject = examSubjectSelect.value;
+    if (!subject) {
+      alert('Please select a subject to load exams.');
       return;
     }
-    const text = messageInputEl.value.trim();
-    if (!text) return;
-    const chat = chats.find(c => c.id === currentChatId);
-    chat.messages.push({ from: 'student', text });
-    renderMessages(chat.messages);
-    messageInputEl.value = '';
-    messageInputEl.focus();
-  }
-
-  renderChatList();
-
-  // Settings profile picture upload
-  const profilePicture = document.getElementById('profilePicture');
-  const avatarInput = document.getElementById('avatarInput');
-
-  profilePicture.addEventListener('click', () => avatarInput.click());
-  profilePicture.addEventListener('keypress', e => {
-    if(e.key === 'Enter' || e.key === ' ') avatarInput.click();
+    loadExams(subject);
   });
 
-  avatarInput.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      profilePicture.src = ev.target.result;
+  function loadExams(subject) {
+    examTableBody.innerHTML = '';
+    examDetails.style.display = 'none';
+    if (!examsDB[subject] || examsDB[subject].length === 0) {
+      examTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; font-style: italic;">No exams available for ${subject}.</td></tr>`;
+      return;
     }
-    reader.readAsDataURL(file);
-  });
+    examsDB[subject].forEach((exam, idx) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${exam.course}</td>
+        <td>${exam.credits}</td>
+        <td>${exam.teacher}</td>
+        <td>${exam.grade === null ? 'Not graded' : exam.grade + '%'}</td>
+        <td><button aria-label="View or take exam for ${exam.course}" data-exam-index="${idx}">Open</button></td>
+      `;
+      examTableBody.appendChild(tr);
+    });
 
-  // Settings form submit
-  document.getElementById('settingsForm').addEventListener('submit', e => {
-    e.preventDefault();
-    alert('Settings saved (simulated).');
-  });
-
-  // Logout placeholder
-  function logout() {
-    alert('Logged out (simulated).');
+    // Add event listeners to buttons
+    examTableBody.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = +btn.getAttribute('data-exam-index');
+        openExam(subject, idx);
+      });
+    });
   }
+
+  function openExam(subject, examIndex) {
+    const exam = examsDB[subject][examIndex];
+    examDetails.style.display = 'block';
+    examDetails.innerHTML = '';
+
+    if (exam.grade === null) {
+      // Student can take exam
+      const examForm = document.createElement('form');
+      examForm.innerHTML = `
+        <h3>Taking Exam: ${exam.course}</h3>
+        <pre style="white-space: pre-wrap; background:#f9f9f9; padding:1rem; border-radius:10px; border: 1px solid var(--oxblood);">${exam.examContent}</pre>
+        <label for="examAnswers">Your Answers:</label>
+        <textarea id="examAnswers" required rows="6" style="width:100%; font-family: monospace; font-size:1rem;"></textarea>
+        <button type="submit" style="margin-top:1rem; background: var(--oxblood); color: var(--gold); border:none; padding:0.5rem 1rem; border-radius:10px; font-weight:bold; cursor:pointer;">Submit Exam</button>
+      `;
+
+      examForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const answers = examForm.querySelector('#examAnswers').value.trim();
+        if (!answers) {
+          alert('Please enter your answers.');
+          return;
+        }
+        exam.answers = answers;
+        exam.grade = "Pending grading";
+        alert('Your exam has been submitted for grading.');
+        renderExamsAgain(subject);
+        examDetails.style.display = 'none';
+      });
+
+      examDetails.appendChild(examForm);
+    } else if (exam.grade === "Pending grading") {
+      examDetails.innerHTML = `<p>Your exam for <strong>${exam.course}</strong> is pending grading. Please check back later.</p>`;
+    } else {
+      // Show graded exam
+      examDetails.innerHTML = `
+        <h3>Graded Exam: ${exam.course}</h3>
+        <p><strong>Teacher:</strong> ${exam.teacher}</p>
+        <p><strong>Grade:</strong> ${exam.grade}%</p>
+        <h4>Your Answers:</h4>
+        <pre style="white-space: pre-wrap; background:#f9f9f9; padding:1rem; border-radius:10px; border: 1px solid var(--oxblood);">${exam.answers}</pre>
+      `;
+    }
+  }
+
+  function renderExamsAgain(subject) {
+    loadExams(subject);
+  }
+
+  // Inbox - chat simulation
+  const chatList = document.getElementById('chatList');
+  const chatHeader = document.getElementById('chatHeader');
+  const messageThread = document.getElementById('messageThread');
+  const messageForm = document.getElementById('messageForm');
+  const messageRecipient = document.getElementById('messageRecipient');
+
+  // Simulated message storage per department
+  const messages = {
+    IT: [],
+    Admissions: [],
+    President: [],
+    Faculty: [],
+    Registrar: [],
+    Library: []
+  };
+  let activeDept = null;
+
+  function loadMessages(dept) {
+    chatHeader.textContent = deptNames[dept];
+    messageRecipient.value = dept;
+    messageThread.innerHTML = '';
+    activeDept = dept;
+
+    messages[dept].forEach(msg => {
+      appendMessage(msg.text, msg.sent);
+    });
+  }
+
+  function appendMessage(text, sent = true) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sent ? 'sent' : 'received');
+    msgDiv.textContent = text;
+    messageThread.appendChild(msgDiv);
+    messageThread.scrollTop = messageThread.scrollHeight;
+  }
+
+  const deptNames = {
+    IT: "Information Technology",
+    Admissions: "Dean of Admissions",
+    President: "President of the Collegiate",
+    Faculty: "Faculty Affairs",
+    Registrar: "Registrar's Office",
+    Library: "Library Services"
+  };
+
+  chatList.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', () => {
+      chatList.querySelectorAll('li').forEach(el => el.classList.remove('active'));
+      li.classList.add('active');
+      loadMessages(li.getAttribute('data-dept'));
+    });
+  });
+
+  // Send message form
+  messageForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!activeDept) {
+      alert('Please select a department first.');
+      return;
+    }
+    const recipient = messageRecipient.value;
+    const subject = messageForm.messageSubject.value.trim();
+    const body = messageForm.messageBody.value.trim();
+    if (!recipient || !subject || !body) {
+      alert('Please complete all fields.');
+      return;
+    }
+
+    const fullMessage = `Subject: ${subject}\n${body}`;
+    messages[recipient].push({text: fullMessage, sent: true});
+
+    appendMessage(fullMessage, true);
+
+    messageForm.reset();
+
+    // Simulate department reply after delay
+    setTimeout(() => {
+      const reply = `Auto-reply from ${deptNames[recipient]}: We received your message on "${subject}". We will respond shortly.`;
+      messages[recipient].push({text: reply, sent: false});
+      if (activeDept === recipient) {
+        appendMessage(reply, false);
+      }
+    }, 1500);
+  });
+
+  // Load first dept by default
+  chatList.querySelector('li').click();
+
+  // Calendar Section
+  const monthYearLabel = document.getElementById('monthYearLabel');
+  const calendarBody = document.getElementById('calendarBody');
+  const prevMonthBtn = document.getElementById('prevMonthBtn');
+  const nextMonthBtn = document.getElementById('nextMonthBtn');
+  const addEventBtn = document.getElementById('addEventBtn');
+  const eventModal = document.getElementById('eventModal');
+  const cancelEventBtn = document.getElementById('cancelEventBtn');
+  const eventForm = document.getElementById('eventForm');
+
+  let calendarDate = new Date();
+  calendarDate.setDate(1);
+
+  // Events stored in memory
+  let calendarEvents = [
+    {date: formatDateISO(new Date()), title: 'Welcome Orientation', description: 'Meet your advisors and peers.', type: 'Meeting'}
+  ];
+
+  function renderCalendar() {
+    calendarBody.innerHTML = '';
+
+    const year = calendarDate.getFullYear();
+    const month = calendarDate.getMonth();
+
+    monthYearLabel.textContent = calendarDate.toLocaleString('default', {month: 'long', year: 'numeric'});
+
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    let date = 1;
+    // 6 rows (weeks) * 7 days = 42 cells max
+    for (let i = 0; i < 6; i++) {
+      const tr = document.createElement('tr');
+
+      for (let d = 0; d < 7; d++) {
+        const td = document.createElement('td');
+        if (i === 0 && d < firstDayIndex) {
+          td.textContent = '';
+        } else if (date > lastDay) {
+          td.textContent = '';
+        } else {
+          td.textContent = date;
+
+          // Add events for this day
+          const thisDateISO = formatDateISO(new Date(year, month, date));
+          const eventsToday = calendarEvents.filter(e => e.date === thisDateISO);
+          eventsToday.forEach(ev => {
+            const evSpan = document.createElement('span');
+            evSpan.className = 'event';
+            evSpan.textContent = ev.title;
+            td.appendChild(evSpan);
+          });
+
+          // Click to open event modal with prefilled date
+          td.addEventListener('click', () => {
+            openEventModal(thisDateISO);
+          });
+
+          date++;
+        }
+        tr.appendChild(td);
+      }
+      calendarBody.appendChild(tr);
+    }
+  }
+
+  function formatDateISO(dateObj) {
+    return dateObj.toISOString().split('T')[0];
+  }
+
+  prevMonthBtn.addEventListener('click', () => {
+    calendarDate.setMonth(calendarDate.getMonth() - 1);
+    renderCalendar();
+  });
+
+  nextMonthBtn.addEventListener('click', () => {
+    calendarDate.setMonth(calendarDate.getMonth() + 1);
+    renderCalendar();
+  });
+
+  addEventBtn.addEventListener('click', () => {
+    openEventModal();
+  });
+
+  cancelEventBtn.addEventListener('click', () => {
+    eventModal.classList.remove('active');
+    eventForm.reset();
+  });
+
+  eventForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const date = eventForm.eventDate.value;
+    const title = eventForm.eventTitle.value.trim();
+    const description = eventForm.eventDescription.value.trim();
+    const type = eventForm.eventType.value;
+
+    if (!date || !title) {
+      alert('Date and Title are required.');
+      return;
+    }
+
+    calendarEvents.push({date, title, description, type});
+    renderCalendar();
+    eventModal.classList.remove('active');
+    eventForm.reset();
+  });
+
+  function openEventModal(date = '') {
+    eventModal.classList.add('active');
+    eventForm.eventDate.value = date || formatDateISO(new Date());
+    eventForm.eventTitle.focus();
+  }
+
+  renderCalendar();
+
+  // Settings Form logic (simulate saving, validate password reset)
+  const settingsForm = document.getElementById('settingsForm');
+  settingsForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const currentPwd = settingsForm.currentPassword.value.trim();
+    const newPwd = settingsForm.newPassword.value.trim();
+    const confirmPwd = settingsForm.confirmPassword.value.trim();
+
+    if ((newPwd || confirmPwd) && newPwd !== confirmPwd) {
+      alert('New password and confirmation do not match.');
+      return;
+    }
+
+    // Simulate save profile
+    alert('Settings saved successfully!');
+
+    settingsForm.reset();
+  });
 </script>
 
 </body>
