@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCKEUFx08YmQLjg-1pYktvMf79OV6u_-vc",
+  apiKey: "AIzaSyC4QpoOW7n-9iNEBHv4r7QhmR7c8FtXuSo",
   authDomain: "x-veritas-collegiate-c92a8.firebaseapp.com",
   projectId: "x-veritas-collegiate-c92a8",
   storageBucket: "x-veritas-collegiate-c92a8.appspot.com",
