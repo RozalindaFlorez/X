@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>X Veritas Certificate Tracker</title>
+  <link rel="icon" type="image/png" href="crest.png" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4efe7;
+      margin: 0;
+      padding: 0;
+      color: #2c3e50;
+    }
+    header {
+      background: #2a5d9f;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+    }
+    header img {
+      height: 60px;
+      margin-right: 1rem;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .year {
+      margin-bottom: 2rem;
+    }
+    .year h2 {
+      border-bottom: 3px solid #2a5d9f;
+      padding-bottom: 0.3rem;
+      margin-bottom: 1rem;
+    }
+    .category {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #2a5d9f;
+    }
+    .course {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      user-select: none;
+      position: relative;
+    }
+    .course:hover {
+      background: #f0f0f0;
+    }
+    .course-detail {
+      margin-top: 1rem;
+      background: #fafafa;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: inset 0 0 10px #ddd;
+    }
+    .links {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .links a {
+      color: #2a5d9f;
+      text-decoration: none;
+      border-bottom: 1.5px solid #2a5d9f;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .links a:hover {
+      color: #555;
+      border-color: #555;
+    }
+
+    /* Tabs styling */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .tabs button {
+      padding: 0.4rem 1rem;
+      border: 1.5px solid #2a5d9f;
+      background: #dce4f7;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      font-weight: 600;
+      color: #2a5d9f;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+    .tabs button.active {
+      background: #2a5d9f;
+      color: white;
+      border-bottom-color: white;
+    }
+    /* Delete button on tab */
+    .tabs button .delete-note {
+      position: absolute;
+      top: 2px;
+      right: 4px;
+      font-size: 0.9rem;
+      color: #a42323;
+      cursor: pointer;
+      user-select: none;
+      font-weight: bold;
+      display: none;
+    }
+    .tabs button:hover .delete-note {
+      display: inline-block;
+    }
+    .tab-content {
+      border: 1.5px solid #2a5d9f;
+      border-top: none;
+      padding: 1rem;
+      border-radius: 0 0 5px 5px;
+      background: #fff;
+      min-height: 150px;
+      box-sizing: border-box;
+      font-family: 'Georgia', serif;
+      white-space: pre-wrap;
+      overflow-y: auto;
+    }
+    .tab-content textarea {
+      width: 100%;
+      height: 140px;
+      border: none;
+      resize: vertical;
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      line-height: 1.5;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          #f9f9f9,
+          #f9f9f9 24px,
+          #d0d7f7 25px,
+          #f9f9f9 26px
+        );
+      padding: 0.5rem 1rem;
+      box-sizing: border-box;
+      outline: none;
+      border-radius: 0 0 5px 5px;
+    }
+    /* Add "notebook paper" vertical lines with pseudo-element */
+    .tab-content textarea::placeholder {
+      font-style: italic;
+      color: #999;
+    }
+    .add-note-btn {
+      margin-bottom: 1rem;
+      background: #2a5d9f;
+      color: white;
+      border: none;
+      padding: 0.4rem 1rem;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .add-note-btn:hover {
+      background: #1f4578;
+    }
+
+    /* Certificate upload */
+    .certificate-section {
+      margin-top: 1.5rem;
+      border: 2px solid #8b1c1c;
+      padding: 1rem;
+      border-radius: 6px;
+      max-width: 320px;
+      background: #fff;
+    }
+    .certificate-frame {
+      margin-top: 1rem;
+      max-width: 100%;
+      border: 2px solid #8b1c1c;
+      border-radius: 6px;
+      padding: 0.3rem;
+      box-shadow: 0 0 6px #8b1c1c;
+      overflow-wrap: break-word;
+    }
+    .certificate-frame img {
+      max-width: 100%;
+      border-radius: 4px;
+    }
+    .certificate-frame a {
+      color: #8b1c1c;
+      font-weight: 600;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+    .upload-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #8b1c1c;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      header img {
+        margin-bottom: 0.5rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="crest.png" alt="School Crest" />
+    <h1>X Veritas Certificate Tracker</h1>
+  </header>
+
+  <main class="container" id="courseContainer"></main>
+
+  <script>
+    const curriculum = {
+      "Year I: Cognitive Foundations": {
+        "Logic": [
+          { id: "logic1", name: "Introduction to Logic", url: "https://www.coursera.org/learn/logic-introduction" },
+          { id: "logic2", name: "Mindware: Critical Thinking", url: "https://www.coursera.org/learn/mindware" }
+        ],
+        "Critical Ethics": [
+          { id: "ethics1", name: "Moral Foundations of Politics", url: "https://www.coursera.org/learn/moral-politics" },
+          { id: "ethics2", name: "AI & Ethics", url: "https://www.coursera.org/learn/ai-ethics" }
+        ],
+        "Rhetoric": [
+          { id: "rhet1", name: "English for Effective Business Speaking", url: "https://www.coursera.org/learn/business-english-speaking" },
+          { id: "rhet2", name: "Presentation Skills", url: "https://www.coursera.org/learn/presentation-skills" }
+        ]
+      },
+      "Year II: Field Application": {
+        "Complex Simulations": [
+          { id: "sim1", name: "Game Theory", url: "https://www.coursera.org/learn/game-theory-1" },
+          { id: "sim2", name: "Systems Thinking", url: "https://www.coursera.org/learn/uva-darden-systems-thinking" }
+        ],
+        "Code & Cipher": [
+          { id: "code1", name: "Introduction to Cyber Security", url: "https://www.coursera.org/learn/intro-cyber-security" },
+          { id: "code2", name: "Cryptography", url: "https://www.coursera.org/learn/crypto" }
+        ]
+      },
+      "Year III: Specialized Mastery": {
+        "Intelligence": [
+          { id: "intel1", name: "Foundations of Strategic Intelligence", url: "https://www.coursera.org/learn/strategic-intelligence" },
+          { id: "intel2", name: "Cyber Threat Intelligence", url: "https://www.coursera.org/learn/cyber-threat-intelligence" }
+        ],
+        "Engineering": [
+          { id: "eng1", name: "Digital Systems: From Logic Gates to Processors", url: "https://www.coursera.org/learn/digital-systems" },
+          { id: "eng2", name: "Electrical Engineering Fundamentals", url: "https://www.coursera.org/learn/electrical-engineering" }
+        ],
+        "Leadership": [
+          { id: "lead1", name: "Leading People and Teams", url: "https://www.coursera.org/specializations/leading-people-teams" },
+          { id: "lead2", name: "Ethical Leadership Through Giving Voice to Values", url: "https://www.coursera.org/learn/giving-voice-to-values" }
+        ]
+      },
+      "Year IV: Leadership Execution": {
+        "Thesis Initiative": [
+          { id: "thesis1", name: "Writing a Research Paper", url: "https://www.coursera.org/learn/writing-a-research-paper" },
+          { id: "thesis2", name: "Academic Writing", url: "https://www.coursera.org/learn/academic-writing" }
+        ],
+        "Lab Deployments": [
+          { id: "lab1", name: "Leadership in Practice", url: "https://www.coursera.org/learn/leadership-practice" },
+          { id: "lab2", name: "Project Management Principles and Practices", url: "https://www.coursera.org/specializations/project-management" }
+        ],
+        "Public Defense Panels": [
+          { id: "defense1", name: "Effective Communication: Writing, Design, and Presentation", url: "https://www.coursera.org/learn/effective-communication" },
+          { id: "defense2", name: "Successful Presentation", url: "https://www.coursera.org/learn/presentation-skills" }
+        ]
+      }
+    };
+
+    const container = document.getElementById("courseContainer");
+
+    // Load saved data or initialize
+    const savedNotes = JSON.parse(localStorage.getItem("courseNotes") || "{}");
+    const savedCerts = JSON.parse(localStorage.getItem("courseCerts") || "{}");
+
+    // Helper: save notes object to localStorage
+    function saveNotes() {
+      localStorage.setItem("courseNotes", JSON.stringify(savedNotes));
+    }
+
+    // Helper: save certs object to localStorage
+    function saveCerts() {
+      localStorage.setItem("courseCerts", JSON.stringify(savedCerts));
+    }
+
+    // Create course UI
+    for (const [year, categories] of Object.entries(curriculum)) {
+      const yearSection = document.createElement("section");
+      yearSection.className = "year";
+      const yearTitle = document.createElement("h2");
+      yearTitle.textContent = year;
+      yearSection.appendChild(yearTitle);
+
+      for (const [category, courses] of Object.entries(categories)) {
+        const categoryTitle = document.createElement("div");
+        categoryTitle.className = "category";
+        categoryTitle.textContent = category;
+        yearSection.appendChild(categoryTitle);
+
+        courses.forEach(course => {
+          const courseDiv = document.createElement("div");
+          courseDiv.className = "course";
+
+          // Course name (click to toggle detail)
+          const courseName = document.createElement("strong");
+          courseName.textContent = course.name;
+          courseDiv.appendChild(courseName);
+
+          // Course detail section (notes, link, certificate)
+          const detailDiv = document.createElement("div");
+          detailDiv.className = "course-detail";
+          detailDiv.style.marginTop = "1rem";
+          detailDiv.style.display = "none";
+
+          // Coursera link
+          const linkDiv = document.createElement("div");
+          linkDiv.className = "links";
+          const courseLink = document.createElement("a");
+          courseLink.href = course.url;
+          courseLink.target = "_blank";
+          courseLink.rel = "noopener noreferrer";
+          courseLink.textContent = "Go to Coursera Course";
+          linkDiv.appendChild(courseLink);
+
+          // Tabs for notes
+          const tabsDiv = document.createElement("div");
+          tabsDiv.className = "tabs";
+
+          // Notes tabs container
+          const notesTabs = document.createElement("div");
+          notesTabs.style.display = "flex";
+          notesTabs.style.gap = "0.5rem";
+          notesTabs.style.flexWrap = "wrap";
+          notesTabs.style.marginBottom = "0.8rem";
+
+          // Tab content container
+          const tabContents = document.createElement("div");
+
+          // Function to create a note tab and its content with rename & delete
+          function createNoteTab(noteId, title = "New Note", content = "") {
+            const tabBtn = document.createElement("button");
+            tabBtn.className = "tab-button";
+            tabBtn.style.flex = "0 0 auto";
+
+            // Span for title (click to rename)
+            const titleSpan = document.createElement("span");
+            titleSpan.textContent = title;
+            titleSpan.style.cursor = "pointer";
+            titleSpan.title = "Click to rename";
+            tabBtn.appendChild(titleSpan);
+
+            // Delete icon
+            const delBtn = document.createElement("span");
+            delBtn.textContent = "×";
+            delBtn.className = "delete-note";
+            delBtn.title = "Delete note";
+            tabBtn.appendChild(delBtn);
+
+            const noteContent = document.createElement("textarea");
+            noteContent.className = "tab-content";
+            noteContent.value = content;
+
+            // Show first tab active by default
+            if (notesTabs.children.length === 0) {
+              tabBtn.classList.add("active");
+              noteContent.style.display = "block";
+            } else {
+              noteContent.style.display = "none";
+            }
+
+            // Click tab to show content
+            tabBtn.addEventListener("click", (e) => {
+              if (e.target === delBtn) return; // don't toggle if clicked delete
+              for (const btn of notesTabs.children) btn.classList.remove("active");
+              for (const txt of tabContents.children) txt.style.display = "none";
+              tabBtn.classList.add("active");
+              noteContent.style.display = "block";
+
+              // Save active tab in localStorage for this course
+              savedNotes[course.id].activeTab = noteId;
+              saveNotes();
+            });
+
+            // Rename note on clicking titleSpan
+            titleSpan.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const newTitle = prompt("Rename note:", titleSpan.textContent);
+              if (newTitle && newTitle.trim()) {
+                const trimmed = newTitle.trim();
+                // Update UI
+                titleSpan.textContent = trimmed;
+
+                // Update savedNotes keys
+                if (!savedNotes[course.id]) savedNotes[course.id] = { notes: {}, activeTab: noteId };
+                const notesObj = savedNotes[course.id].notes;
+
+                // Save content of old key temporarily
+                const oldContent = notesObj[noteId] || "";
+                delete notesObj[noteId];
+                notesObj[trimmed] = oldContent;
+
+                // Update activeTab if needed
+                if (savedNotes[course.id].activeTab === noteId) {
+                  savedNotes[course.id].activeTab = trimmed;
+                }
+
+                saveNotes();
+
+                // Update noteId for event listeners below to match new key
+                noteId = trimmed;
+              }
+            });
+
+            // Delete note with confirmation
+            delBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              if (confirm(`Are you sure you want to delete the note "${titleSpan.textContent}"? This action cannot be undone.`)) {
+                // Remove tab and content
+                notesTabs.removeChild(tabBtn);
+                tabContents.removeChild(noteContent);
+
+                if (!savedNotes[course.id]) savedNotes[course.id] = { notes: {}, activeTab: null };
+                const notesObj = savedNotes[course.id].notes;
+                delete notesObj[noteId];
+
+                // If deleted tab was active, activate first tab if exists
+                if (savedNotes[course.id].activeTab === noteId) {
+                  if (notesTabs.children.length > 0) {
+                    notesTabs.children[0].click();
+                  } else {
+                    savedNotes[course.id].activeTab = null;
+                  }
+                }
+
+                saveNotes();
+              }
+            });
+
+            // Save content as user types
+            noteContent.addEventListener("input", () => {
+              if (!savedNotes[course.id]) savedNotes[course.id] = { notes: {}, activeTab: noteId };
+              savedNotes[course.id].notes[noteId] = noteContent.value;
+              saveNotes();
+            });
+
+            notesTabs.appendChild(tabBtn);
+            tabContents.appendChild(noteContent);
+          }
+
+          // Load notes from storage or create default
+          if (!savedNotes[course.id]) {
+            savedNotes[course.id] = { notes: {}, activeTab: null };
+            createNoteTab("New Note");
+          } else {
+            const notesData = savedNotes[course.id].notes;
+            const active = savedNotes[course.id].activeTab;
+            const keys = Object.keys(notesData);
+            if (keys.length === 0) {
+              createNoteTab("New Note");
+            } else {
+              for (const key of keys) {
+                createNoteTab(key, key, notesData[key]);
+              }
+            }
+            // Activate saved active tab
+            if (active) {
+              setTimeout(() => {
+                const allTabs = notesTabs.children;
+                for (const btn of allTabs) {
+                  if (btn.firstChild.textContent === active) {
+                    btn.click();
+                    break;
+                  }
+                }
+              }, 0);
+            }
+          }
+
+          // Add note button
+          const addNoteBtn = document.createElement("button");
+          addNoteBtn.className = "add-note-btn";
+          addNoteBtn.textContent = "+ Add Note";
+          addNoteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const newId = `New Note`;
+            // Ensure unique name for new note
+            let uniqueId = newId;
+            let counter = 1;
+            while(savedNotes[course.id] && savedNotes[course.id].notes && savedNotes[course.id].notes[uniqueId]){
+              uniqueId = `${newId} ${counter++}`;
+            }
+            createNoteTab(uniqueId, uniqueId);
+            if (!savedNotes[course.id]) savedNotes[course.id] = { notes: {}, activeTab: uniqueId };
+            else savedNotes[course.id].activeTab = uniqueId;
+            saveNotes();
+
+            // Switch to new tab immediately
+            const tabsArray = Array.from(notesTabs.children);
+            const newTabBtn = tabsArray.find(btn => btn.firstChild.textContent === uniqueId);
+            if(newTabBtn) newTabBtn.click();
+          });
+
+          tabsDiv.appendChild(notesTabs);
+
+          detailDiv.appendChild(linkDiv);
+          detailDiv.appendChild(tabsDiv);
+          detailDiv.appendChild(addNoteBtn);
+          detailDiv.appendChild(tabContents);
+
+          // Certificate upload section
+          const certSection = document.createElement("div");
+          certSection.className = "certificate-section";
+
+          const certLabel = document.createElement("label");
+          certLabel.className = "upload-label";
+          certLabel.textContent = "Upload Certificate";
+
+          const fileInput = document.createElement("input");
+          fileInput.type = "file";
+          fileInput.accept = "image/*,application/pdf";
+
+          const certFrame = document.createElement("div");
+          certFrame.className = "certificate-frame";
+
+          // Load saved cert if exists
+          if (savedCerts[course.id]) {
+            if (savedCerts[course.id].type.includes("image")) {
+              certFrame.innerHTML = `<img src="${savedCerts[course.id].data}" alt="Certificate" />`;
+            } else {
+              certFrame.innerHTML = `<a href="${savedCerts[course.id].data}" target="_blank" rel="noopener noreferrer">View Certificate</a>`;
+            }
+          }
+
+          fileInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              if (file.type.includes("image")) {
+                certFrame.innerHTML = `<img src="${reader.result}" alt="Certificate" />`;
+              } else {
+                certFrame.innerHTML = `<a href="${reader.result}" target="_blank" rel="noopener noreferrer">View Certificate</a>`;
+              }
+              savedCerts[course.id] = { data: reader.result, type: file.type };
+              saveCerts();
+            };
+            reader.readAsDataURL(file);
+          });
+
+          certSection.appendChild(certLabel);
+          certSection.appendChild(fileInput);
+          certSection.appendChild(certFrame);
+
+          detailDiv.appendChild(certSection);
+
+          courseDiv.appendChild(detailDiv);
+
+          yearSection.appendChild(courseDiv);
+
+          // Toggle detail on course click ONLY if click is on courseDiv (outside child elements)
+          courseDiv.addEventListener("click", (e) => {
+            if (e.target === courseDiv) {
+              detailDiv.style.display = detailDiv.style.display === "block" ? "none" : "block";
+            }
+          });
+        });
+      }
+
+      container.appendChild(yearSection);
+    }
+  </script>
+</body>
+</html>
